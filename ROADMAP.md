@@ -2,6 +2,9 @@
 
 Implement one phase at a time. Owner instruction is required to start the next.
 
+Phase 1: independently audited and repaired; local acceptance passed (see
+`docs/phase1-audit.md`). The owner has authorized the next single phase.
+
 1. **Foundation and validation:** packaging, bounded strict JSONL, pinned offline
    official schema validation, validate CLI, tests, lint, typing, baseline CI.
 2. **Replay and snapshots:** surface/component lifecycle, data model pointer

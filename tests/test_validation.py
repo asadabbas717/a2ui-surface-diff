@@ -4,6 +4,7 @@ import os
 import socket
 import subprocess
 import sys
+import sysconfig
 from importlib.resources import files
 from pathlib import Path
 
@@ -278,7 +279,9 @@ def test_cli_subprocess(args, exit_code):
 
 def test_installed_entrypoint(tmp_path):
     path = write_stream(tmp_path, [CREATE, TEXT])
-    command = Path(sys.executable).parent / ("surfdiff.exe" if os.name == "nt" else "surfdiff")
+    command = Path(sysconfig.get_path("scripts")) / (
+        "surfdiff.exe" if os.name == "nt" else "surfdiff"
+    )
     result = subprocess.run(
         [str(command), "validate", str(path), "--format", "json"],
         capture_output=True,
@@ -287,3 +290,14 @@ def test_installed_entrypoint(tmp_path):
     )
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["messages_checked"] == 2
+
+
+@pytest.mark.parametrize("whitespace", ["\u00a0", "\u2003", "\v", "\f"])
+def test_non_json_whitespace_is_not_a_blank_line(tmp_path, whitespace):
+    path = write_stream(tmp_path, [CREATE])
+    with path.open("a", encoding="utf-8") as stream:
+        stream.write(whitespace + "\n")
+    report = validate_file(path)
+    assert not report.valid
+    assert report.diagnostics[0].code == "INVALID_JSON"
+    assert report.diagnostics[0].line == 2

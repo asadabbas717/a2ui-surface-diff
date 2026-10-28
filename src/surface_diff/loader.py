@@ -81,7 +81,7 @@ def load_jsonl(path: Path, limits: Limits = DEFAULT_LIMITS) -> Iterator[tuple[in
                     text = raw.decode("utf-8")
                 except UnicodeDecodeError:
                     fail("INPUT_ENCODING", "Expected UTF-8 input without a byte-order mark.", line)
-                if not text.strip():
+                if not text.strip(" \t\r\n"):
                     continue
                 count += 1
                 if count > limits.messages:
