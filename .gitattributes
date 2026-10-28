@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Preserve upstream asset bytes so hashes survive Windows checkouts.
+src/surface_diff/schemas/** -text
+docs/upstream-protocol.md -text

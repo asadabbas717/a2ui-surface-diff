@@ -1,0 +1,10 @@
+SurfaceDiff is independent and unofficial; no Google or A2UI endorsement is implied.
+
+This distribution includes unmodified A2UI protocol schemas and an example from
+https://github.com/a2ui-project/a2ui at revision
+4767c140e13b4d8952b92b3bef35b81121dc8810.
+Copyright and license notices in upstream assets are preserved.
+Upstream license: Apache License 2.0, reproduced in
+src/surface_diff/schemas/UPSTREAM_LICENSE.
+docs/upstream-protocol.md is the protocol text from that same revision.
+SHA256SUMS.json records the vendored asset digests.
