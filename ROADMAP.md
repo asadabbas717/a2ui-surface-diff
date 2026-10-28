@@ -7,8 +7,8 @@ Phase 1: independently audited and repaired; local acceptance passed (see
 Phase 2: audited and repaired; local acceptance passes. The original Phase 2
 revision passed the full hosted matrix; see `docs/phase2-audit.md`.
 The owner has authorized Phase 3 and committing/pushing tested milestones.
-Phase 3 is complete locally; its tested milestone will be committed/pushed and
-the exact hosted result recorded in STATE.md. Phase 4 has not started.
+Phase 3 is complete and pushed as c3ffc6b. Hosted run 40786664420 passed the
+full Windows/Linux and Python 3.12/3.13 matrix. Phase 4 has not started.
 
 ## Phase 3 scope and acceptance
 
