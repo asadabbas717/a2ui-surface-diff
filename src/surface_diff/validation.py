@@ -1,10 +1,11 @@
 """Offline validation against unmodified pinned upstream schemas.
 
-Phase 1 checks message syntax and Basic Catalog structure only. Lifecycle and
-final-reference verification belong to the replay phase.
+This module checks message syntax and Basic Catalog structure. Stateful
+verification is composed with these checks in analysis.py.
 """
 
 import json
+from collections.abc import Iterator
 from importlib.resources import files
 from pathlib import Path
 from typing import Any
@@ -12,7 +13,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
-from surface_diff.diagnostics import Diagnostic, InvalidInput, Report
+from surface_diff.diagnostics import Diagnostic, InvalidInput
 from surface_diff.loader import DEFAULT_LIMITS, Limits, load_jsonl
 
 SCHEMA_REVISION = "4767c140e13b4d8952b92b3bef35b81121dc8810"
@@ -46,62 +47,47 @@ def _pointer(parts: Any) -> str:
     return "".join("/" + str(part).replace("~", "~0").replace("/", "~1") for part in parts)
 
 
-def validate_file(path: Path, limits: Limits = DEFAULT_LIMITS) -> Report:
+def validated_messages(
+    path: Path, limits: Limits = DEFAULT_LIMITS
+) -> Iterator[tuple[int, dict[str, Any]]]:
+    """Yield schema-valid messages in input order or raise a contextual error."""
     validator = make_validator()
-    checked = 0
-    try:
-        for line, message in load_jsonl(path, limits):
-            if (
-                isinstance(message, dict)
-                and "version" in message
-                and message["version"] not in ("v0.9", "v0.9.1")
-            ):
-                return Report(
-                    str(path),
-                    checked,
-                    (
-                        Diagnostic(
-                            "UNSUPPORTED_VERSION", "Expected v0.9 or v0.9.1.", line, "/version"
-                        ),
-                    ),
-                )
-            if isinstance(message, dict) and isinstance(message.get("createSurface"), dict):
-                catalog = message["createSurface"].get("catalogId")
-                if isinstance(catalog, str) and catalog not in BASIC_CATALOGS:
-                    return Report(
-                        str(path),
-                        checked,
-                        (
-                            Diagnostic(
-                                "UNSUPPORTED_CATALOG",
-                                "Only the pinned Basic Catalog is supported.",
-                                line,
-                                "/createSurface/catalogId",
-                            ),
-                        ),
+    for line, message in load_jsonl(path, limits):
+        if (
+            isinstance(message, dict)
+            and "version" in message
+            and message["version"] not in ("v0.9", "v0.9.1")
+        ):
+            raise InvalidInput(
+                Diagnostic("UNSUPPORTED_VERSION", "Expected v0.9 or v0.9.1.", line, "/version")
+            )
+        if isinstance(message, dict) and isinstance(message.get("createSurface"), dict):
+            catalog = message["createSurface"].get("catalogId")
+            if isinstance(catalog, str) and catalog not in BASIC_CATALOGS:
+                raise InvalidInput(
+                    Diagnostic(
+                        "UNSUPPORTED_CATALOG",
+                        "Only the pinned Basic Catalog is supported.",
+                        line,
+                        "/createSurface/catalogId",
                     )
-            # Select the official branch only when the envelope is unambiguous.
-            # This avoids oneOf errors about unrelated message types.
-            operations = [op for op in OPERATIONS if isinstance(message, dict) and op in message]
-            selected = validator
-            if len(operations) == 1:
-                definition = operations[0][0].upper() + operations[0][1:] + "Message"
-                selected = validator.evolve(
-                    schema={"$ref": f"{validator.schema['$id']}#/$defs/{definition}"}
                 )
-            error = next(selected.iter_errors(message), None)
-            if error is not None:
-                location = _pointer(error.absolute_path)
-                # Do not echo schema error.message: it may contain application secrets.
-                diagnostic = Diagnostic(
+        operations = [op for op in OPERATIONS if isinstance(message, dict) and op in message]
+        selected = validator
+        if len(operations) == 1:
+            definition = operations[0][0].upper() + operations[0][1:] + "Message"
+            selected = validator.evolve(
+                schema={"$ref": f"{validator.schema['$id']}#/$defs/{definition}"}
+            )
+        error = next(selected.iter_errors(message), None)
+        if error is not None:
+            raise InvalidInput(
+                Diagnostic(
                     "SCHEMA_INVALID",
                     f"Message fails official schema rule '{error.validator}'; "
                     "check required fields, types, and Basic Catalog properties.",
                     line,
-                    location,
+                    _pointer(error.absolute_path),
                 )
-                return Report(str(path), checked, (diagnostic,))
-            checked += 1
-    except InvalidInput as error:
-        return Report(str(path), checked, (error.diagnostic,))
-    return Report(str(path), checked)
+            )
+        yield line, message

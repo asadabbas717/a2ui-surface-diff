@@ -11,9 +11,10 @@ from pathlib import Path
 import pytest
 
 from surface_diff import __version__
+from surface_diff.analysis import validate_file
 from surface_diff.cli import main
 from surface_diff.loader import Limits
-from surface_diff.validation import BASIC_CATALOGS, make_validator, validate_file
+from surface_diff.validation import BASIC_CATALOGS, make_validator
 
 CATALOG = sorted(BASIC_CATALOGS)[0]
 CREATE = {"version": "v0.9.1", "createSurface": {"surfaceId": "main", "catalogId": CATALOG}}
@@ -216,9 +217,9 @@ def test_catalog_theme_and_bound_properties(tmp_path):
     create = copy.deepcopy(CREATE)
     create["createSurface"]["theme"] = {"unknown": "secret-value"}
     # The official theme schema permits extra keys; do not invent constraints.
-    assert validate_file(write_stream(tmp_path, [create])).valid
+    assert validate_file(write_stream(tmp_path, [create, TEXT])).valid
     create["createSurface"]["theme"] = "invalid"
-    assert not validate_file(write_stream(tmp_path, [create])).valid
+    assert not validate_file(write_stream(tmp_path, [create, TEXT])).valid
 
 
 def test_schema_validation_non_mutating():
@@ -227,17 +228,18 @@ def test_schema_validation_non_mutating():
     assert original == TEXT
 
 
-def test_phase_one_scope_explicit(tmp_path):
-    # Lifecycle and final references intentionally require Phase 2.
+def test_phase_two_scope_explicit(tmp_path):
+    # Validation now requires lifecycle and final-state integrity.
     report = validate_file(write_stream(tmp_path, [TEXT]))
-    assert report.valid
-    assert report.as_dict()["scope"] == "message_syntax_and_basic_catalog"
+    assert not report.valid
+    assert report.diagnostics[0].code == "SURFACE_MISSING"
+    assert report.as_dict()["scope"] == "schemas_lifecycle_and_final_references"
 
 
 def test_cli_output(tmp_path, capsys):
     path = write_stream(tmp_path, [CREATE, TEXT])
     assert main([str_arg for str_arg in ["validate", str(path)]]) == 0
-    assert "syntax/catalog only" in capsys.readouterr().out
+    assert "schemas/lifecycle/final references" in capsys.readouterr().out
     path.write_text("{", encoding="utf-8")
     assert main(["validate", str(path)]) == 2
     captured = capsys.readouterr()
@@ -245,7 +247,7 @@ def test_cli_output(tmp_path, capsys):
     assert main(["validate", str(path), "--format", "json"]) == 2
     captured = capsys.readouterr()
     data = json.loads(captured.out)
-    assert data["status"] == "error" and data["report_version"] == 1
+    assert data["status"] == "error" and data["report_version"] == 2
     assert not captured.err
 
 
@@ -253,7 +255,7 @@ def test_resource_failure(tmp_path, monkeypatch, capsys):
     def exhausted(path):
         raise RecursionError
 
-    monkeypatch.setattr("surface_diff.cli.validate_file", exhausted)
+    monkeypatch.setattr("surface_diff.cli.analyze_file", exhausted)
     assert main(["validate", str(tmp_path)]) == 2
     assert "incomplete" in capsys.readouterr().err
 

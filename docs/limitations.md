@@ -1,22 +1,30 @@
 # Current limitations
 
-Phase 1 validates individual message syntax and Basic Catalog structure only.
-It does not detect updates before creation, duplicate active surfaces, missing
-roots, dangling final references, invalid data-model pointer application, cycles,
-or truncation that happens to end on a complete message boundary. A stream with
-valid syntax may therefore be unusable at runtime. Empty captures and truncated
-JSON messages fail. Snapshot and check commands are not implemented yet.
+Phase 2 validates supported syntax, lifecycle, data updates, roots, final
+references, and cycles. snapshot records final active state. check/comparison
+remain Phase 3 work. A complete-message truncation that leaves coherent state
+cannot be detected without an application-level completion signal.
 
-Only the pinned Basic Catalog is supported. Runtime custom catalogs, function
-evaluation, binding resolution, rendering, legacy v0.8, and candidate v1.0 are
-unsupported. Progressive references are left alone until final-state validation
-is implemented in Phase 2.
+Only the pinned Basic Catalog is supported. Custom catalogs, v0.8, candidate
+v1.0, rendering, function evaluation, and dynamic binding resolution are excluded.
+Templates are checked for their component definition, not instantiated. Unreachable
+components are retained and checked. Sharing children among parents is allowed.
 
-Limits bound file bytes and decoded shape, not execution wall time. JSON Schema
-combinators can be expensive on adversarial inputs; this is not a sandbox for
-hostile multi-tenant workloads. Error output omits message values, but structural
-paths and file names can contain sensitive identifiers.
+Batches partially update the collection; each supplied definition must satisfy
+the official full component schema. Type-omitting patches accepted by some SDKs
+are not accepted by these schemas. Omitted properties on repeated definitions
+are removed; nested properties are not merged. Component defaults are not added.
+Surface theme/sendDataModel defaults are normalized; catalog IDs stay as captured.
+See snapshots.md for exact pointer and undefined-slot semantics.
 
-Local verification uses Windows/Python 3.13. Linux and Python 3.12 are configured
-in CI, pending hosted verification. The owner has supplied the GitHub repository
-and authorized a Phase 1 commit/push. No package publication or release is authorized.
+Snapshots contain potentially sensitive data. Review before committing. Error
+paths/file names may contain identifiers even though error messages omit values.
+Resource limits bound state growth, not execution wall time. Repeated large
+updates and schema combinators can be expensive. This is not a multi-tenant sandbox.
+Atomic snapshot publication requires hard-link support (e.g. NTFS/ext4). Denied
+operations fail without replacing baselines. This does not guarantee durability
+against power loss.
+
+Local verification uses Windows/Python 3.13. Original Phase 1 hosted CI passed
+Ubuntu 3.12/3.13 but failed Windows due to a repaired test-path defect. New hosted
+results remain pending. Package publication and releases remain unauthorized.

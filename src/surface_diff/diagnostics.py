@@ -30,10 +30,10 @@ class Report:
 
     def as_dict(self) -> dict[str, Any]:
         return {
-            "report_version": 1,
+            "report_version": 2,
             "command": "validate",
             "status": "passed" if self.valid else "error",
-            "scope": "message_syntax_and_basic_catalog",
+            "scope": "schemas_lifecycle_and_final_references",
             "source": self.source,
             "messages_checked": self.messages_checked,
             "diagnostics": [asdict(item) for item in self.diagnostics],

@@ -6,7 +6,9 @@ import sys
 from pathlib import Path
 
 from surface_diff import __version__
-from surface_diff.validation import validate_file
+from surface_diff.analysis import analyze_file
+from surface_diff.diagnostics import InvalidInput
+from surface_diff.snapshot import write_snapshot
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -16,22 +18,38 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
     validate = commands.add_parser(
-        "validate", help="Validate message syntax and Basic Catalog structure (Phase 1)."
+        "validate", help="Validate schemas, lifecycle, and final Basic Catalog references."
     )
     validate.add_argument("input", type=Path)
     validate.add_argument("--format", choices=("text", "json"), default="text")
+    snapshot = commands.add_parser("snapshot", help="Write a canonical final-state snapshot.")
+    snapshot.add_argument("input", type=Path)
+    snapshot.add_argument("--out", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        report = validate_file(args.input)
+        analysis = analyze_file(args.input)
+        report = analysis.report
+        if args.command == "snapshot" and report.valid:
+            assert analysis.snapshot is not None
+            write_snapshot(args.out, analysis.snapshot)
     except (RecursionError, MemoryError):
         print("surfdiff: processing resource limit exceeded; analysis incomplete.", file=sys.stderr)
         return 2
-    if args.format == "json":
+    except InvalidInput as error:
+        print(f"surfdiff: {error.diagnostic.code}: {error.diagnostic.message}", file=sys.stderr)
+        return 2
+    except OSError:
+        print("surfdiff: output processing failed; analysis incomplete.", file=sys.stderr)
+        return 2
+    if args.command == "snapshot" and report.valid:
+        print(f"Snapshot written: {args.out}")
+        return 0
+    if getattr(args, "format", "text") == "json":
         print(json.dumps(report.as_dict(), ensure_ascii=True, sort_keys=True))
     elif report.valid:
         print(
             f"PASS {report.source}: {report.messages_checked} messages validated "
-            "(syntax/catalog only)."
+            "(schemas/lifecycle/final references)."
         )
     else:
         for diagnostic in report.diagnostics:

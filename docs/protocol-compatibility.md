@@ -33,11 +33,24 @@ SurfaceDiff does not infer catalog contents or fetch a catalog ID.
 
 Supported message syntax: `createSurface`, `updateComponents`, `updateDataModel`,
 `deleteSurface`. Schema validation includes catalog components, theme, bindings,
-and function/action structure. It is not full protocol validation in this phase.
+and function/action structure. Phase 2 adds lifecycle, final roots/references/
+cycles, and supported data updates.
 
-Protocol findings for Phase 2: creation must precede updates/deletion; deleting
+Replay semantics: creation must precede updates/deletion; deleting
 permits ID reuse; component lists add/update components rather than replace the
 whole collection; intermediate unresolved references are permitted; data updates
 replace the target, omitted value deletes, and omitted path or `/` targets the
-root. Array deletion and partial component semantics require careful upstream
-implementation/test inspection before replay implementation.
+root. Array deletion preserves slot position; snapshots distinguish undefined
+slots from explicit null. See snapshots.md for pointer compatibility decisions.
+
+Implementation paths inspected at that same revision:
+
+- typescript/core/web_core/src/state/data-model.ts
+- typescript/core/web_core/src/state/component-model.ts
+- typescript/core/web_core/src/processing/message-processor.ts
+- python/a2ui_core/src/a2ui/core/state/data_model.py
+
+Component property assignments replace rather than deep-merge. Collection
+updates retain other components. Some SDKs allow type-omitting patches despite
+the official component schema requiring type/properties; this release follows
+the schema contract. No candidate v1.0 behavior is implemented.

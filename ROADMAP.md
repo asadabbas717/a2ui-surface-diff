@@ -4,6 +4,27 @@ Implement one phase at a time. Owner instruction is required to start the next.
 
 Phase 1: independently audited and repaired; local acceptance passed (see
 `docs/phase1-audit.md`). The owner has authorized the next single phase.
+Phase 2: implemented and accepted locally; new hosted verification is pending.
+Phase 3 has not started and requires the next owner iteration instruction.
+
+## Phase 2 scope and acceptance
+
+Implement schema-validated replay, lifecycle checks, independent surfaces,
+component collection upserts, bounded JSON Pointer data updates, progressive
+references with final graph checks, and deterministic versioned snapshots.
+Expose `snapshot <capture> --out <new-path>`; strengthen validate to include
+replay/final-state checks. Do not implement comparison/check or release work.
+
+Acceptance: equivalent message batching/mapping order yields identical snapshot
+bytes; deletion/recreation resets state; arrays distinguish null and deleted slots;
+final references/roots/cycles fail predictably; source inputs are unchanged;
+existing output is never replaced; no expression evaluation/network occurs;
+tests, coverage, lint, format, typing, and artifact checks pass locally.
+
+Risks: SDK/schema disagreement about component patches and null/JSON Pointer
+behavior; sparse-array serialization; state-growth attacks; filesystem-dependent
+atomic output. Decisions are documented in protocol-compatibility.md and
+snapshots.md. Hosted cross-platform verification remains a separate evidence item.
 
 1. **Foundation and validation:** packaging, bounded strict JSONL, pinned offline
    official schema validation, validate CLI, tests, lint, typing, baseline CI.
