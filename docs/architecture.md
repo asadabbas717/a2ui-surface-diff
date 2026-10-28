@@ -20,3 +20,13 @@ The pure replay() API expects schema-validated messages; file callers use
 analyze_file()/validate_file() from analysis.py. No expressions are evaluated,
 no runtime catalog/schema fetch occurs, and diagnostics avoid raw input values.
 Input and effective state are bounded, but this is not a wall-time sandbox.
+
+baseline.py reads a bounded strict JSON document, checks the snapshot wrapper,
+reuses official component validation and replay integrity checks, restores
+undefined slots, and returns canonical state. comparison.py performs read-only
+comparison and builds a separate CheckReport. Missing object properties and
+undefined array slots have distinct internal sentinels. JSON booleans never
+compare equal to numbers; numeric representations such as 1/1.0 do compare equal.
+Added/removed containers and component type changes stop descendant reporting.
+All output paths are escaped pointers sorted lexicographically. The comparison
+limit fails the entire operation rather than returning a partial successful diff.

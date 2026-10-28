@@ -7,6 +7,26 @@ Phase 1: independently audited and repaired; local acceptance passed (see
 Phase 2: audited and repaired; local acceptance passes. The original Phase 2
 revision passed the full hosted matrix; see `docs/phase2-audit.md`.
 The owner has authorized Phase 3 and committing/pushing tested milestones.
+Phase 3 is complete locally; its tested milestone will be committed/pushed and
+the exact hosted result recorded in STATE.md. Phase 4 has not started.
+
+## Phase 3 scope and acceptance
+
+Add read-only baseline validation, deterministic structural comparison, check
+CLI, concise text reports, and a stable JSON comparison report. Preserve exact
+paths and meaningful ordering; do not evaluate expressions or report visual
+changes. Added/removed containers and type changes must avoid redundant reports.
+Accept: identical/equivalent state exits 0, differences exit 1, all malformed or
+unsupported inputs and incomplete comparisons exit 2. Validate baseline structure,
+protocol metadata, IDs, references, bounds, and undefined-slot metadata before
+comparison. Baseline and capture bytes remain unchanged on every check outcome.
+Run unit/integration/CLI, coverage, lint, format, types, dependency, packaging,
+artifact-installation, and available CI verification. No Phase 4 implementation.
+
+Risks: boolean/number equality, array ordering and absence, unsafe/malformed
+baselines, misleading duplicate diagnostics, and unbounded report size. Use strict
+bounded JSON parsing, semantic baseline checks, explicit value states, stable
+sorting, and an explicit failure when comparison limits prevent a complete result.
 
 ## Phase 2 scope and acceptance
 

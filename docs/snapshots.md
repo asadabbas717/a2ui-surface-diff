@@ -4,6 +4,12 @@
 entire input before writing. Output is UTF-8 JSON with ASCII escapes, two-space
 indentation, sorted mapping keys, and one LF terminator. Existing output entries
 are never replaced. Parent directories must exist and support hard links.
+The packaged `schemas/snapshot-v1.json` defines the structural contract; check
+also validates IDs, supported protocol/catalogs, final graphs, and data semantics.
+Snapshot writing and baseline loading share bounds: 64 MiB, 1,000,000 JSON value
+nodes, nesting depth 80 (including wrappers). Serialization fails before writing
+if these bounds would make the output unusable as a baseline. Existing replay
+limits still apply to data models, component counts, and surfaces.
 
 Top-level fields: `snapshot_version: 1`, `protocol` containing `target: v0.9.1`
 and the pinned `schema_revision`, and `surfaces`, a mapping keyed by surface ID.

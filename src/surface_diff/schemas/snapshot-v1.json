@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SurfaceDiff snapshot version 1",
+  "type": "object",
+  "required": ["snapshot_version", "protocol", "surfaces"],
+  "additionalProperties": false,
+  "properties": {
+    "snapshot_version": {"type": "integer", "const": 1},
+    "protocol": {
+      "type": "object",
+      "required": ["target", "schema_revision"],
+      "additionalProperties": false,
+      "properties": {
+        "target": {"const": "v0.9.1"},
+        "schema_revision": {"const": "4767c140e13b4d8952b92b3bef35b81121dc8810"}
+      }
+    },
+    "surfaces": {
+      "type": "object",
+      "maxProperties": 1000,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["createSurface", "components", "dataModel", "undefinedDataPaths"],
+        "additionalProperties": false,
+        "properties": {
+          "createSurface": {
+            "type": "object",
+            "required": ["surfaceId", "catalogId", "theme", "sendDataModel"]
+          },
+          "components": {
+            "type": "object",
+            "additionalProperties": {"type": "object"},
+            "maxProperties": 20000
+          },
+          "dataModel": {},
+          "undefinedDataPaths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    }
+  }
+}

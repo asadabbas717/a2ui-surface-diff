@@ -39,7 +39,7 @@ def _constant(value: str) -> NoReturn:
     raise ValueError("Non-finite number")
 
 
-def _check_shape(value: Any, limits: Limits, line: int) -> None:
+def check_shape(value: Any, limits: Limits, line: int | None) -> None:
     pending = [(value, 0)]
     nodes = 0
     while pending:
@@ -65,6 +65,22 @@ def _check_shape(value: Any, limits: Limits, line: int) -> None:
                 fail("INVALID_JSON", "JSON strings must contain valid Unicode scalar values.", line)
 
 
+def parse_json(text: str, limits: Limits, line: int | None = None) -> Any:
+    """Strict JSON decoding shared by captures and saved snapshots."""
+    try:
+        value = json.loads(text, object_pairs_hook=_pairs, parse_constant=_constant)
+    except json.JSONDecodeError as error:
+        fail(
+            "INVALID_JSON",
+            f"Malformed JSON at column {error.colno}.",
+            line if line is not None else error.lineno,
+        )
+    except (ValueError, RecursionError):
+        fail("INVALID_JSON", "Invalid JSON: duplicate key, number, or nesting.", line)
+    check_shape(value, limits, line)
+    return value
+
+
 def load_jsonl(path: Path, limits: Limits = DEFAULT_LIMITS) -> Iterator[tuple[int, Any]]:
     """Yield physical line numbers and parsed values; stop at the first input error."""
     try:
@@ -86,13 +102,7 @@ def load_jsonl(path: Path, limits: Limits = DEFAULT_LIMITS) -> Iterator[tuple[in
                 count += 1
                 if count > limits.messages:
                     fail("MESSAGE_LIMIT", "Input exceeds message count limit.", line)
-                try:
-                    value = json.loads(text, object_pairs_hook=_pairs, parse_constant=_constant)
-                except json.JSONDecodeError as error:
-                    fail("INVALID_JSON", f"Malformed JSON at column {error.colno}.", line)
-                except (ValueError, RecursionError):
-                    fail("INVALID_JSON", "Invalid JSON: duplicate key, number, or nesting.", line)
-                _check_shape(value, limits, line)
+                value = parse_json(text, limits, line)
                 yield line, value
             if not count:
                 fail("EMPTY_INPUT", "Input contains no messages.")

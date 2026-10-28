@@ -2,148 +2,147 @@
 
 Updated: 2026-10-29 (Asia/Karachi).
 
-## Current status
+## Current status and authorization
 
-Phase 1 independently audited and repaired; Phase 2 audited and repaired.
-Phases 3 and 4 have not started. Development version: 0.1.0.dev2; target 0.1.0.
-Branch: main. The iteration started clean at 41355ec910ca9bc6df5572f225798c8c5a9e6cf9.
-No unrelated user work was present or removed.
+Phases 1–3 are complete locally. Phase 4 has not started. Development version:
+0.1.0.dev3; target release remains 0.1.0. Branch: main. This iteration started
+clean and synchronized at 476bda703b5d9c65d25c3b232a7271ced8af6916. No unrelated
+user changes were present or removed.
 
 Remote: https://github.com/asadabbas717/a2ui-surface-diff.git.
-Original Phase 1 was pushed as 41355ec. The local audit repair commit is
-08be30ada503c6855c410f6dd877afe514e74006. The Phase 2 commit containing this
-state records the next implementation. This iteration creates local commits;
-new commits have not been pushed. No package publication, release, or visibility
-change occurred. The owner-created initial history and Apache-2.0 license remain.
+The owner explicitly authorized commit/push of every milestone after its checks
+pass. The Phase 2 audit repair was committed/pushed as
+57c9426a21355c8fc48eb10b622d797a4b1f812b. The Phase 3 implementation is recorded
+by the commit containing this state. Its exact commit/run result is available in
+Git/Actions and the iteration completion report; no hosted success is assumed.
+No package publication, release, or visibility change is authorized or performed.
 
 ## Previous-phase audit
 
-See docs/phase1-audit.md for severity, reproduction, repairs, and evidence.
-Two Medium findings were repaired: non-JSON whitespace lines could be skipped,
-and the entrypoint test assumed the wrong Windows script directory outside a
-venv. Four whitespace regression cases and the retained installed-executable
-subprocess test cover the corrections. No Critical/High issue was reproduced.
-Phase 1 local acceptance: PASS after repairs, 57 tests, 98.90% statement coverage,
-lint/format/mypy/build/metadata all passed. Commit 08be30a isolates the repairs.
+See docs/phase2-audit.md. Two Medium defects were repaired: absent deletion
+through a null intermediate changed state, and stdout rendering bypassed the
+CLI failure boundary. Nulls now remain unchanged on absent-descendant deletion;
+output failures return processing-error code 2. During Phase 3, explicit flush
+and failed-stream closure also fixed buffered shutdown behavior, verified with a
+real closed-pipe subprocess. No Critical/High defect was reproduced in the audit.
 
-Hosted evidence was read, not inferred: run 40781697398 for original 41355ec
-passed Ubuntu 3.12/3.13, but Windows 3.12/3.13 failed the incorrect script-path
-test. This is historical evidence, not verification of the repaired/new commits.
-Hosted Phase 2 run 40783646327 passed all Windows/Linux 3.12/3.13 jobs at
-476bda7. Only Windows/Python 3.13.15 is available for local execution.
+Repaired Phase 2 local evidence: 105 tests, 99.57% statement coverage, and all
+lint/format/type/dependency/build/metadata checks passed. Its hosted run
+40784042065 passed all four Ubuntu/Windows, Python 3.12/3.13 jobs. Original Phase 2
+run 40783646327 also passed all four jobs. Original Phase 1 run 40781697398 failed
+Windows on an entrypoint test-path defect fixed in 08be30a; the historical failure
+is retained in docs/phase1-audit.md rather than represented as current success.
 
-## Phase 2 delivered
+## Phase 3 delivered
 
-- Streaming schema validation composed with session-local stateful replay.
-- Surface creation/deletion, duplicate/missing lifecycle checks, clean ID reuse,
-  independent surfaces, component collection upserts, duplicate-batch checks.
-- Bounded effective data-model upserts, root replacement/deletion, null values,
-  escaped JSON Pointers, empty interior segments, implicit containers/arrays,
-  non-shifting deleted array slots, primitive traversal errors.
-- Progressive references; final roots/references/template targets and cycles
-  checked across all active components with iterative graph traversal.
-- Canonical snapshot version 1, preserving identities, actions, bindings,
-  expressions, array order, surface configuration, and effective model values.
-- snapshot CLI with complete-file atomic publication and no overwrite.
-- validate now checks replay/final state. Validation report version 2 explicitly
-  declares the stronger scope instead of silently changing version 1 semantics.
-- Added replay/data-model/analysis/snapshot modules, behavioral tests, snapshot
-  documentation, and a snapshot smoke command in the CI matrix.
+- check CLI: validate baseline first, replay/validate candidate, compare final
+  supported state. Exit 0 equal, 1 differences, 2 invalid/incomplete processing.
+- Read-only bounded strict JSON baseline parsing, duplicate/nonfinite/Unicode
+  rejection, wrapper schema, exact version/protocol metadata checks, matching
+  surface/component IDs, official schema checks, graph/state/undefined-slot checks.
+- Deterministic structural paths and codes for surfaces, components/types,
+  properties, actions, child/tab ordering, references, and effective data.
+- Added/removed containers and component type changes suppress descendant noise.
+  Arrays compare by index; exact child/tab reorders produce a single change.
+- JSON-aware equality: booleans differ from numbers; 1 and 1.0 compare equal.
+  Null, absent properties, and undefined array slots remain distinct.
+- Text output contains concise codes/paths; versioned JSON reports contain
+  explicit before/after value states. Sensitive values may be present in JSON.
+- SurfaceDiff-authored snapshot-v1.json and check-report-v1.json contracts,
+  independent baseline/no-difference/regression fixtures, realistic checkout demo,
+  CI check smoke command, and documentation updates.
+- Strict parsing shared between JSONL and snapshots. No new dependencies.
 
-## Protocol and design decisions
+## Architecture and compatibility decisions
 
-Pinned official revision: 4767c140e13b4d8952b92b3bef35b81121dc8810.
-Vendored schemas/licenses/example and exact byte hashes are unchanged. Git
-attributes preserve their bytes. Both v0.9 and v0.9.1 messages are accepted,
-as the official schemas require; two documented Basic Catalog IDs are accepted.
-Unknown catalogs fail closed. Runtime has no network calls or expression execution.
+baseline.py composes existing official schema validation and replay integrity
+checks, then returns canonical state. comparison.py owns read-only diff/report
+logic. analysis/replay/data_model/snapshot retain their earlier responsibilities.
+No rendering, network access, expression evaluation, automatic approvals, filters,
+plugins, custom catalogs, or candidate v1.0 features were added.
 
-Inspected pinned protocol text and TypeScript/Python implementation paths are
-listed in docs/protocol-compatibility.md. Collection updates retain untouched
-components. Each supplied definition replaces that component's properties and
-must satisfy the official schema. SDK type-omitting patches are unsupported
-because the pinned schemas require complete definitions.
+Pinned upstream revision: 4767c140e13b4d8952b92b3bef35b81121dc8810. Vendored assets,
+hashes, and license notices are unchanged. New SurfaceDiff schemas are separate
+from upstream hash entries. Both official v0.9/v0.9.1 envelope versions and the two
+documented Basic Catalog IDs remain supported. Captured catalog IDs are significant.
+SDK/schema/null/pointer differences remain explicit in protocol-compatibility.md
+and snapshots.md. Component collection upserts retain other components; each full
+definition replaces properties. Dynamic values and bindings compare structurally.
 
-The protocol text distinguishes explicit null from omitted values. Null remains
-a value, including at root; root deletion resets to {}. Some SDK implementations
-collapse null/deletion or drop empty pointer segments. We follow the protocol text
-and RFC pointer escaping, with A2UI's special / root convention, and document the
-renderer discrepancies. Arrays preserve undefined slots via null placeholders
-plus undefinedDataPaths, avoiding collision with arbitrary captured JSON objects.
+Snapshot wrapper version remains 1; validation report remains version 2. Check
+reports use command=check/report_version=1, with passed/different/error status.
+Consumers dispatch on command and version. Error reports contain no partial diff.
+Snapshots/baselines: 64 MiB, 1M value nodes, depth 80 including wrappers. The writer
+checks the same bounds so it does not publish an unreadable baseline. Existing
+capture/replay limits remain: 16 MiB stream, 1 MiB physical line, 10000 messages,
+100,000 message nodes/depth 64, 1,000 active surfaces, 20,000 active components,
+200,000 combined model nodes/depth 64, maximum array index 10,000.
 
-Bounds: input 16 MiB, physical line 1 MiB, 10000 messages, decoded message depth 64
-and 100,000 value nodes. Replay: 1,000 active surfaces, 20,000 total active components,
-200,000 combined data-model nodes, model depth 64, maximum array index 10,000. There is no
-wall-time sandbox. Source values are copied before state changes. Graph traversal
-is iterative and covers unreachable active components too; shared children are
-allowed. Dynamic templates are checked, not evaluated. Component defaults are
-not materialized; creation theme/sendDataModel defaults are normalized.
+Comparisons stop with code 2 at 20000 changes or a 32 MiB serialized change-payload
+budget. The budget prevents long repeated ancestor keys from multiplying report
+memory use. Paths sort lexicographically after JSON Pointer escaping, then by code;
+index 10 precedes 2. Undefined data slots are restored before comparing and are not
+reported twice through raw undefinedDataPaths metadata. Added/removed containers
+and type changes are intentionally summarized. Other arrays use positional
+comparison without speculative alignment. See comparison.md and reports.md.
 
-Snapshot output uses a same-directory temporary file plus os.link to publish
-without replacing any existing entry. NTFS/ext4 support this; unsupported or
-denied links fail with OUTPUT_IO. No partial destination is published. The local
-sandbox denies hard links, so native-permission test execution was required.
-The sandbox run's two output failures were investigated, not hidden or skipped;
-the native run passed every assertion. Atomic publication does not promise
-power-loss durability. Snapshot/report formats are documented under docs/.
+## Executed verification
 
-## Verification evidence for Phase 2
-
-Commands executed from the project, with .venv\Scripts\python:
+Local platform: Windows/Python 3.13.15. Project-local TEMP/TMP were used for pip
+and builds because the sandbox default temp directory has permission restrictions.
+Tests run with native NTFS permissions because snapshot hard links are denied in
+the sandbox; tests were not skipped or assertions weakened.
 
 ```powershell
 .venv\Scripts\python -m pip install --no-build-isolation --no-deps -e .
-.venv\Scripts\python -m pytest --basetemp=.tmp/phase2-acceptance --cov-report=xml
+.venv\Scripts\python -m pytest --basetemp=.tmp/phase3-final --cov-report=xml
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python -m ruff format --check .
 .venv\Scripts\python -m mypy
 .venv\Scripts\python -m pip check
 .venv\Scripts\python -m build --no-isolation
 .venv\Scripts\python -m twine check dist/*
+.tmp\install-env\Scripts\python -m pip install --no-index --no-deps --force-reinstall dist/a2ui_surface_diff-0.1.0.dev3-py3-none-any.whl
 git diff --check
 ```
 
-Test execution used native filesystem permissions. **100 passed**, **98.90%**
-statement coverage (451/456). Uncredited statements are the subprocess module
-entry point and an output-error boundary. Strict mypy passes all ten modules;
-Ruff lint/format and dependency consistency pass. Wheel/sdist build and metadata
-checks pass; no vulnerability scanner is configured or claimed. The dev dependency
-version inventory remains requirements-dev.lock, not a portable hash lock.
+170 tests passed; 99.72% statement coverage (706/708). Only the two module entry
+statements were not credited in-process; module/installed entrypoints are exercised
+as subprocesses. Ruff lint/format, strict mypy (12 modules), dependency consistency,
+wheel/sdist build and metadata checks all pass. No vulnerability scanner is
+configured or claimed. A first new test expected pre-escape key order; inspection
+confirmed the implementation's specified escaped-path order, and the exact
+expectation was corrected rather than weakening the ordering assertion.
 
-The earlier source install and artifact checks are preserved in docs/phase1-audit.md
-and commit history. New artifact smoke execution installs the Phase 2 wheel into
-.tmp/install-env and invokes it outside the checkout, validates and snapshots the
-example, compares snapshot bytes, checks version, and verifies no network access.
+Installed-wheel smoke checks ran outside the checkout using .tmp/install-env:
+the real README snapshot/check workflow, exit codes 0/1/2, report JSON Schema,
+version, baseline/capture byte preservation, and direct checks with socket creation
+blocked all passed. Wheel inspection confirms both authored schemas and new
+modules; sdist includes comparison fixtures/docs and excludes environments/temp.
+The release-quality dependency inventory remains requirements-dev.lock; it is a
+Windows version inventory, not a portable hash lock. Dependencies did not change.
 
-## Remaining limitations and next step
+## Remaining risks, deferred work, exact next step
 
-No known Critical/High defect remains in implemented Phase 2 scope. This remains
-a development preview, not a completed regression-comparison product.
+No known Critical/High defect remains in implemented Phase 3 scope. This is still
+a development preview pending Phase 4 release-readiness hardening.
 
-- check/structural comparison and comparison JSON reports are Phase 3.
-- Repaired/new hosted Windows/Linux 3.12/3.13 CI is still pending.
-- SDK-specific partial definitions, custom catalogs, rendering, binding/function
-  execution, v0.8 and candidate v1.0 are unsupported.
-- Complete-message truncation leaving coherent state cannot be detected.
-- Snapshot publication needs hard-link support. Limits do not guarantee wall time.
-- Lower-priority schema-error guidance, portable dependency locking, and CI action
-  runtime refresh remain deferred to Phase 4; see the audit.
-- PyPI names were initially checked with 404 results but are unreserved; recheck
-  before any owner-authorized publication. Package publication remains unauthorized.
+- Phase 3 hosted verification must be read for its exact pushed commit; historical
+  matrix success does not establish new success. A follow-up state record may
+  document that verified result without advancing the phase.
+- Snapshots need hard-link support (e.g. NTFS/ext4); denied/unsupported publication
+  fails without replacing existing entries. Atomicity is not power-loss durability.
+- No wall-time sandbox or performance promise. Repeated model updates copy state.
+- SDK-specific type-omitting patches, arbitrary catalogs, evaluation, rendering,
+  v0.8 and candidate v1.0 remain unsupported. Coherent complete-message truncation
+  cannot be detected without an external completion signal.
+- Array alignment, detailed nested schema-error guidance, portable dependency
+  locking, dependency/license/security review, and CI action runtime refresh are
+  deferred; no MVP expansion is implied. JSON diff reports can contain sensitive data.
+- PyPI naming was initially checked but remains unreserved; recheck before any
+  owner-authorized publication. Keep Apache-2.0 and independent/unofficial identity.
 
-Exact next step: await the owner's next iteration instruction. Then audit Phase 2
-before implementing only Phase 3: structural diff/check, stable comparison reports,
-exit1 for valid differences, exit2 for errors, and strict baseline non-mutation.
-Do not start Phase 3 automatically or publish/release anything.
-
-## Current iteration: Phase 2 audit repair milestone
-
-The owner has now authorized Phase 3 after review and commit/push of every tested
-milestone. Phase 2 and the earlier audit were already pushed before this iteration.
-The iteration started clean and synchronized at 476bda7. The independent Phase 2
-audit repaired null-descendant deletion and the stdout exception boundary; see
-docs/phase2-audit.md. Repaired local evidence: 105 tests, 99.57% coverage, all
-configured lint/format/type/dependency/build/metadata checks pass. This tested
-repair milestone is committed/pushed before starting Phase 3. Publication and
-releases remain unauthorized. The previous next-step text is historical; the
-current next step is Phase 3 implementation only.
+Exact next step after this tested milestone is pushed and hosted CI inspected:
+await the owner's next iteration instruction. Then audit Phase 3 before implementing
+only Phase 4 hardening/release preparation. Do not publish, release, change visibility,
+or automatically start Phase 4.

@@ -1,15 +1,16 @@
 # SurfaceDiff
 
 SurfaceDiff is an independent, unofficial Python CLI for structural regression
-testing of captured A2UI interfaces. Its planned workflow records an approved
+testing of captured A2UI interfaces. Its workflow records an approved
 baseline and detects interface structure changes when models or prompts change.
 It does not render interfaces or run a model. It is not endorsed by Google or
 the A2UI maintainers.
 
-**Current status: Phase 2 development preview (`0.1.0.dev2`).** `validate` and
-`snapshot` are implemented. They validate pinned official A2UI v0.9.1 schemas
+**Current status: Phase 3 development preview (`0.1.0.dev3`).** `validate`,
+`snapshot`, and `check` are implemented. They validate pinned official A2UI v0.9.1 schemas
 (accepting `v0.9` and `v0.9.1` messages), replay captures, and verify lifecycle,
-roots, and final structural references. The `check` command is planned for Phase 3.
+roots, and final references, then compare captured state against an approved
+snapshot. Release hardening remains Phase 4 work.
 
 ## Install and try
 
@@ -22,15 +23,18 @@ python -m pip install .
 Two-command demonstration using the supplied capture:
 
 ```console
-surfdiff validate examples/hello.jsonl
-surfdiff snapshot examples/hello.jsonl --out baseline.json
+surfdiff snapshot examples/checkout-before.jsonl --out baseline.json
+surfdiff check examples/checkout-after.jsonl --baseline baseline.json
 ```
 
 Example terminal output:
 
 ```text
-PASS examples/hello.jsonl: 2 messages validated (schemas/lifecycle/final references).
 Snapshot written: baseline.json
+DIFF examples/checkout-after.jsonl: 3 structural changes.
+  COMPONENT_REMOVED /surfaces/checkout/components/buy
+  COMPONENT_REMOVED /surfaces/checkout/components/buy-label
+  REFERENCE_CHANGED /surfaces/checkout/components/root/children/1
 ```
 
 Windows may display the path with backslashes. No package has been published;
@@ -38,18 +42,21 @@ the source installation above is the supported installation for this phase.
 Snapshot output must be a new path in an existing directory. Existing files,
 including the capture, are never overwritten. Rename a previous demo baseline
 yourself before repeating the snapshot command.
+The second capture loses the purchase button and its label. Its check exits 1,
+so CI detects the structural regression. No rendering or visual inference occurs.
 
 ## CI use
 
-After installing from source in a checkout, run:
+After reviewing and committing your baseline, use `check` in CI. To test the
+unchanged capture against the baseline generated above:
 
 ```console
-surfdiff validate examples/hello.jsonl --format json
+surfdiff check examples/checkout-before.jsonl --baseline baseline.json --format json
 ```
 
-Exit code 0 means schema/replay/final-reference validation passed; 2 means invalid input,
-unsupported input, or a processing error. Exit code 1 is reserved for valid
-comparisons with differences in Phase 3. Invalid input never produces a pass.
+Exit code 0 means a check found no differences (or validation passed), 1 means
+a valid comparison found differences, and 2 means invalid/unsupported input or
+an incomplete/failed operation. Check never writes its baseline or input.
 Validation stops at the first error. JSON reports go to stdout; human-readable
 input errors go to stderr. Argument usage errors use argparse's stderr output.
 

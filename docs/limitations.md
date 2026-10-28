@@ -1,8 +1,8 @@
 # Current limitations
 
-Phase 2 validates supported syntax, lifecycle, data updates, roots, final
-references, and cycles. snapshot records final active state. check/comparison
-remain Phase 3 work. A complete-message truncation that leaves coherent state
+Phase 3 validates supported syntax, lifecycle, data updates, roots, final
+references, and cycles. snapshot records final active state; check compares it
+against a validated, read-only baseline. A complete-message truncation that leaves coherent state
 cannot be detected without an application-level completion signal.
 
 Only the pinned Basic Catalog is supported. Custom catalogs, v0.8, candidate
@@ -26,5 +26,12 @@ operations fail without replacing baselines. This does not guarantee durability
 against power loss.
 
 Local verification uses Windows/Python 3.13. Original Phase 1 hosted CI passed
-Ubuntu 3.12/3.13 but failed Windows due to a repaired test-path defect. New hosted
-results remain pending. Package publication and releases remain unauthorized.
+Ubuntu 3.12/3.13 but failed Windows due to a repaired test-path defect. The Phase 2 implementation and audit repair now both pass the hosted matrix.
+Phase 3 hosted results are tracked separately in STATE.md. Package publication and releases remain unauthorized.
+
+Comparison uses structural paths, not visual semantics. Arrays generally compare
+by index; exact child/tab reorders are summarized. There are no ignore rules,
+custom catalogs, automatic baseline approvals, or version migrations. Reports
+stop at added/removed containers and component type changes, and fail rather
+than truncate at 20000 changes. Snapshot/baseline bounds are documented in
+snapshots.md; metadata/schema mismatches are processing errors, not regressions.

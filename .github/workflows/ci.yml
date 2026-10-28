@@ -25,5 +25,6 @@ jobs:
       - run: surfdiff validate examples/hello.jsonl
       - run: surfdiff validate examples/hello.jsonl --format json
       - run: surfdiff snapshot examples/hello.jsonl --out "${{ runner.temp }}/surfdiff-baseline.json"
+      - run: surfdiff check examples/hello.jsonl --baseline "${{ runner.temp }}/surfdiff-baseline.json" --format json
       - run: python -m build --no-isolation
       - run: python -m twine check dist/*

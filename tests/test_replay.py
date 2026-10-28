@@ -405,7 +405,13 @@ def test_cli_output_error_returns_processing_failure(tmp_path, monkeypatch, caps
     def broken(*args, **kwargs):
         raise OSError("closed output")
 
+    class BrokenOutput:
+        write = staticmethod(broken)
+
+        def close(self):
+            raise OSError("failed close")
+
     with monkeypatch.context() as patch:
-        patch.setattr(sys.stdout, "write", broken)
+        patch.setattr(sys, "stdout", BrokenOutput())
         assert main(["validate", str(source)]) == 2
     assert "output processing failed" in capsys.readouterr().err

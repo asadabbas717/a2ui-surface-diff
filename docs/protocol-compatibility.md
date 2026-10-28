@@ -54,3 +54,10 @@ Component property assignments replace rather than deep-merge. Collection
 updates retain other components. Some SDKs allow type-omitting patches despite
 the official component schema requiring type/properties; this release follows
 the schema contract. No candidate v1.0 behavior is implemented.
+
+Phase 3 compares bindings, expressions, actions, and references structurally.
+It does not evaluate functions or infer rendered appearance. Baseline protocol
+target and immutable schema revision must match this implementation; incompatible
+metadata fails with code 2 rather than being treated as a UI difference.
+snapshot-v1.json and check-report-v1.json are SurfaceDiff-authored schemas,
+distinct from the unmodified upstream assets in SHA256SUMS.json.

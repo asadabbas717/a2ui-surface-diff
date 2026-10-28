@@ -132,3 +132,35 @@ def encode_model(value: Any) -> tuple[Any, list[str]]:
 
     result = encode(value, [])
     return result, sorted(undefined)
+
+
+def decode_model(value: Any, undefined_paths: list[str]) -> Any:
+    """Restore undefined slots from snapshot metadata using RFC pointers, not A2UI root paths."""
+    result = copy.deepcopy(value)
+    if len(set(undefined_paths)) != len(undefined_paths):
+        raise _bad("Undefined slot paths must be unique.")
+    for path in undefined_paths:
+        if path.count("/") > MAX_MODEL_DEPTH:
+            raise _bad("Undefined slot path exceeds the model depth limit.")
+        if not path.startswith("/") or re.search(r"~(?![01])", path):
+            raise _bad("Undefined slot metadata requires escaped absolute JSON Pointers.")
+        parts = [part.replace("~1", "/").replace("~0", "~") for part in path[1:].split("/")]
+        current = result
+        for index, token in enumerate(parts):
+            if isinstance(current, list):
+                key = _index(token)
+                if key >= len(current):
+                    raise _bad("Undefined slot path does not exist.")
+                if index == len(parts) - 1:
+                    if current[key] is not None:
+                        raise _bad("Undefined slots require null array placeholders.")
+                    current[key] = MISSING
+                    break
+                current = current[key]
+            elif isinstance(current, dict) and token in current:
+                current = current[token]
+            else:
+                raise _bad("Undefined slot path does not exist.")
+        else:
+            raise _bad("Undefined slot paths must terminate at an array element.")
+    return result

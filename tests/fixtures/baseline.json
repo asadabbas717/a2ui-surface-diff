@@ -1,0 +1,20 @@
+{
+  "snapshot_version": 1,
+  "protocol": {
+    "target": "v0.9.1",
+    "schema_revision": "4767c140e13b4d8952b92b3bef35b81121dc8810"
+  },
+  "surfaces": {
+    "s": {
+      "createSurface": {
+        "surfaceId": "s",
+        "catalogId": "https://a2ui.org/specification/v0_9/catalogs/basic/catalog.json",
+        "theme": {},
+        "sendDataModel": false
+      },
+      "components": {"root": {"id": "root", "component": "Text", "text": "Hello"}},
+      "dataModel": {},
+      "undefinedDataPaths": []
+    }
+  }
+}

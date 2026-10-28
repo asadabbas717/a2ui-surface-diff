@@ -1,0 +1,2 @@
+{"version":"v0.9.1","createSurface":{"surfaceId":"checkout","catalogId":"https://a2ui.org/specification/v0_9/catalogs/basic/catalog.json"}}
+{"version":"v0.9.1","updateComponents":{"surfaceId":"checkout","components":[{"id":"root","component":"Column","children":["heading","buy"]},{"id":"heading","component":"Text","text":"Order summary"},{"id":"buy","component":"Button","child":"buy-label","action":{"event":{"name":"purchase","context":{"sku":"SKU-42"}}}},{"id":"buy-label","component":"Text","text":"Place order"}]}}

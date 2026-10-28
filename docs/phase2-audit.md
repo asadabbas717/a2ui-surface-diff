@@ -50,3 +50,9 @@ No vulnerability scanner is configured; no vulnerability-scan result is claimed.
 Verdict: **PASS after repairs** for Phase 2 local acceptance. Historical hosted
 success applies to the starting revision; repaired hosted verification is tracked
 separately. The owner authorized committing/pushing each tested milestone.
+
+Repair milestone `57c9426a21355c8fc48eb10b622d797a4b1f812b` was pushed and
+[hosted run 40784042065](https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40784042065)
+passed all four matrix jobs. During Phase 3 review, the output boundary was
+extended to flush buffered output and close a failed stream; a real closed-pipe
+subprocess regression verifies exit 2 rather than interpreter shutdown code 120.

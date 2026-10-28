@@ -7,12 +7,24 @@ from pathlib import Path
 from typing import Any
 
 from surface_diff.diagnostics import Diagnostic, InvalidInput
+from surface_diff.loader import Limits, check_shape
+
+SNAPSHOT_LIMITS = Limits(file_bytes=64 * 1024 * 1024, depth=80, nodes=1_000_000)
 
 
 def serialize_snapshot(snapshot: dict[str, Any]) -> bytes:
-    return (
+    try:
+        check_shape(snapshot, SNAPSHOT_LIMITS, None)
+    except InvalidInput as error:
+        raise InvalidInput(
+            Diagnostic("SNAPSHOT_LIMIT", "Snapshot exceeds supported node/depth limits.")
+        ) from error
+    data = (
         json.dumps(snapshot, sort_keys=True, ensure_ascii=True, allow_nan=False, indent=2) + "\n"
     ).encode("utf-8")
+    if len(data) > SNAPSHOT_LIMITS.file_bytes:
+        raise InvalidInput(Diagnostic("SNAPSHOT_LIMIT", "Snapshot exceeds the 64 MiB byte limit."))
+    return data
 
 
 def write_snapshot(path: Path, snapshot: dict[str, Any]) -> None:
