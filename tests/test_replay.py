@@ -243,6 +243,29 @@ def test_upsert_array_growth_and_absent_deletion():
 @pytest.mark.parametrize(
     "root,path",
     [
+        ({"a": None}, "/a/missing"),
+        ([None], "/0/missing"),
+        ({"a": [None]}, "/a/0/1/deep"),
+    ],
+)
+def test_delete_absent_descendant_preserves_null(root, path):
+    original = copy.deepcopy(root)
+    assert update_model(root, path) == original
+    assert root == original
+
+
+def test_null_descendant_deletion_is_snapshot_noop(tmp_path):
+    original = [create(), components(text()), message("updateDataModel", value={"a": None})]
+    before = analyze_file(capture(tmp_path, original)).snapshot
+    after = analyze_file(
+        capture(tmp_path, original + [message("updateDataModel", path="/a/0")])
+    ).snapshot
+    assert serialize_snapshot(before) == serialize_snapshot(after)
+
+
+@pytest.mark.parametrize(
+    "root,path",
+    [
         ({}, "relative"),
         ({}, "/bad~2"),
         ({}, "/trailing~"),
@@ -374,3 +397,15 @@ def test_snapshot_cli_subprocess_deterministic(tmp_path):
         assert result.returncode == 0, result.stderr
         results.append(output.read_bytes())
     assert results[0] == results[1]
+
+
+def test_cli_output_error_returns_processing_failure(tmp_path, monkeypatch, capsys):
+    source = capture(tmp_path, [create(), components(text())])
+
+    def broken(*args, **kwargs):
+        raise OSError("closed output")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(sys.stdout, "write", broken)
+        assert main(["validate", str(source)]) == 2
+    assert "output processing failed" in capsys.readouterr().err

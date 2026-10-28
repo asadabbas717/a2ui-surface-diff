@@ -4,8 +4,9 @@ Implement one phase at a time. Owner instruction is required to start the next.
 
 Phase 1: independently audited and repaired; local acceptance passed (see
 `docs/phase1-audit.md`). The owner has authorized the next single phase.
-Phase 2: implemented and accepted locally; new hosted verification is pending.
-Phase 3 has not started and requires the next owner iteration instruction.
+Phase 2: audited and repaired; local acceptance passes. The original Phase 2
+revision passed the full hosted matrix; see `docs/phase2-audit.md`.
+The owner has authorized Phase 3 and committing/pushing tested milestones.
 
 ## Phase 2 scope and acceptance
 

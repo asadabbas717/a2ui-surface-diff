@@ -4,7 +4,7 @@ Updated: 2026-10-29 (Asia/Karachi).
 
 ## Current status
 
-Phase 1 independently audited and repaired; Phase 2 complete locally.
+Phase 1 independently audited and repaired; Phase 2 audited and repaired.
 Phases 3 and 4 have not started. Development version: 0.1.0.dev2; target 0.1.0.
 Branch: main. The iteration started clean at 41355ec910ca9bc6df5572f225798c8c5a9e6cf9.
 No unrelated user work was present or removed.
@@ -29,7 +29,8 @@ lint/format/mypy/build/metadata all passed. Commit 08be30a isolates the repairs.
 Hosted evidence was read, not inferred: run 40781697398 for original 41355ec
 passed Ubuntu 3.12/3.13, but Windows 3.12/3.13 failed the incorrect script-path
 test. This is historical evidence, not verification of the repaired/new commits.
-New hosted CI remains pending. Only Windows/Python 3.13.15 was executed locally.
+Hosted Phase 2 run 40783646327 passed all Windows/Linux 3.12/3.13 jobs at
+476bda7. Only Windows/Python 3.13.15 is available for local execution.
 
 ## Phase 2 delivered
 
@@ -134,3 +135,15 @@ Exact next step: await the owner's next iteration instruction. Then audit Phase 
 before implementing only Phase 3: structural diff/check, stable comparison reports,
 exit1 for valid differences, exit2 for errors, and strict baseline non-mutation.
 Do not start Phase 3 automatically or publish/release anything.
+
+## Current iteration: Phase 2 audit repair milestone
+
+The owner has now authorized Phase 3 after review and commit/push of every tested
+milestone. Phase 2 and the earlier audit were already pushed before this iteration.
+The iteration started clean and synchronized at 476bda7. The independent Phase 2
+audit repaired null-descendant deletion and the stdout exception boundary; see
+docs/phase2-audit.md. Repaired local evidence: 105 tests, 99.57% coverage, all
+configured lint/format/type/dependency/build/metadata checks pass. This tested
+repair milestone is committed/pushed before starting Phase 3. Publication and
+releases remain unauthorized. The previous next-step text is historical; the
+current next step is Phase 3 implementation only.

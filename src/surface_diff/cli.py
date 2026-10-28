@@ -27,20 +27,24 @@ def main(argv: list[str] | None = None) -> int:
     snapshot.add_argument("--out", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        analysis = analyze_file(args.input)
-        report = analysis.report
-        if args.command == "snapshot" and report.valid:
-            assert analysis.snapshot is not None
-            write_snapshot(args.out, analysis.snapshot)
+        return _execute(args)
     except (RecursionError, MemoryError):
         print("surfdiff: processing resource limit exceeded; analysis incomplete.", file=sys.stderr)
         return 2
     except InvalidInput as error:
         print(f"surfdiff: {error.diagnostic.code}: {error.diagnostic.message}", file=sys.stderr)
         return 2
-    except OSError:
+    except (OSError, UnicodeError):
         print("surfdiff: output processing failed; analysis incomplete.", file=sys.stderr)
         return 2
+
+
+def _execute(args: argparse.Namespace) -> int:
+    analysis = analyze_file(args.input)
+    report = analysis.report
+    if args.command == "snapshot" and report.valid:
+        assert analysis.snapshot is not None
+        write_snapshot(args.out, analysis.snapshot)
     if args.command == "snapshot" and report.valid:
         print(f"Snapshot written: {args.out}")
         return 0

@@ -101,6 +101,8 @@ def update_model(root: Any, path: str, value: Any = MISSING) -> Any:
                 current[index] = copy.deepcopy(value)
             break
         if old is MISSING or old is None:
+            if value is MISSING:
+                return result  # A descendant of null is absent; do not materialize it.
             child: Any = [] if re.fullmatch(r"0|[1-9][0-9]*", parts[position + 1]) else {}
             if isinstance(current, dict):
                 current[token] = child
