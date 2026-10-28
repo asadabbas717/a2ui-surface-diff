@@ -72,6 +72,9 @@ Text comparison errors go to stderr. Text success/differences and all regular
 JSON reports go to stdout. Usage, catastrophic resource exhaustion, or output
 stream failure uses stderr and exit 2, consistent with existing CLI boundaries.
 JSON before/after values can contain application data; review before sharing.
+Human-readable output escapes control/format characters and literal backslashes
+in untrusted paths and names. This prevents terminal escape injection and forged
+lines; machine-readable JSON retains exact decoded paths and values.
 The complete change payload budget is 32 MiB in addition to the 20,000-change
 limit. Output is flushed inside the CLI failure boundary; a closed output pipe
 returns 2 rather than an interpreter-shutdown flush code.

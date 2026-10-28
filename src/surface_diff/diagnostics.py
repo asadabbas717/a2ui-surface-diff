@@ -1,7 +1,18 @@
 """Stable, content-safe diagnostics shared by input and schema validation."""
 
+import unicodedata
 from dataclasses import asdict, dataclass
 from typing import Any
+
+
+def terminal_text(value: str) -> str:
+    """Escape terminal controls and backslashes without altering machine-readable data."""
+    return "".join(
+        char.encode("unicode_escape").decode("ascii")
+        if char == "\\" or unicodedata.category(char) in ("Cc", "Cf", "Cs", "Zl", "Zp")
+        else char
+        for char in value
+    )
 
 
 @dataclass(frozen=True)

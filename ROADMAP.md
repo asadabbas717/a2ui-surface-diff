@@ -9,6 +9,8 @@ revision passed the full hosted matrix; see `docs/phase2-audit.md`.
 The owner has authorized Phase 3 and committing/pushing tested milestones.
 Phase 3 is complete and pushed as c3ffc6b. Hosted run 40786664420 passed the
 full Windows/Linux and Python 3.12/3.13 matrix. Phase 4 has not started.
+Phase 3 has now passed independent review after a terminal-output repair; see
+`docs/phase3-audit.md`. The owner authorizes the next single phase and tested pushes.
 
 ## Phase 3 scope and acceptance
 

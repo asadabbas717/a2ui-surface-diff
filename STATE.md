@@ -4,6 +4,13 @@ Updated: 2026-10-29 (Asia/Karachi).
 
 ## Current status and authorization
 
+Current iteration starts clean at 733bcbb. Phase 3 is independently reviewed;
+terminal control injection in human output was repaired (172 tests, 99.72%
+coverage; all configured checks pass). See docs/phase3-audit.md. The owner has
+authorized Phase 4 after this acceptance and commit/push of tested milestones.
+The remainder of this state records the preceding Phase 3 milestone until Phase 4
+updates replace it. Package publication/releases remain unauthorized.
+
 Phases 1–3 are complete locally. Phase 4 has not started. Development version:
 0.1.0.dev3; target release remains 0.1.0. Branch: main. This iteration started
 clean and synchronized at 476bda703b5d9c65d25c3b232a7271ced8af6916. No unrelated

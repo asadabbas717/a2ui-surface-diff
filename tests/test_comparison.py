@@ -430,6 +430,36 @@ def test_check_does_not_contact_network(monkeypatch):
     assert check_file(FIXTURES / "regression.jsonl", FIXTURES / "baseline.json").exit_code == 1
 
 
+def test_untrusted_terminal_controls_are_escaped_but_json_paths_are_exact(tmp_path, capsys):
+    value = approved()
+    key = "\x1b[2J\nFAKE PASS\u0085\u202e"
+    value["surfaces"]["s"]["dataModel"] = {key: 0}
+    baseline = saved(tmp_path, value)
+    capture = tmp_path / "capture.jsonl"
+    update = {"version": "v0.9.1", "updateDataModel": {"surfaceId": "s", "value": {key: 1}}}
+    capture.write_text(
+        (FIXTURES / "unchanged.jsonl").read_text() + "\n" + json.dumps(update), encoding="utf-8"
+    )
+    args = ["check", str(capture), "--baseline", str(baseline)]
+    assert main(args) == 1
+    output = capsys.readouterr().out
+    assert len(output.splitlines()) == 2
+    assert not any(control in output for control in ("\x1b", "\x85", "\u202e"))
+    assert "\\x1b[2J\\nFAKE PASS" in output
+    assert main([*args, "--format", "json"]) == 1
+    report = json.loads(capsys.readouterr().out)
+    assert report["changes"][0]["path"] == "/surfaces/s/dataModel/" + key
+
+
+def test_terminal_escape_representation_is_unambiguous():
+    from surface_diff.diagnostics import terminal_text
+
+    assert terminal_text("\n") == "\\n"
+    assert terminal_text("\\n") == "\\\\n"
+    assert terminal_text("café اردو") == "café اردو"
+    assert terminal_text("\u2028\u2066\r") == "\\u2028\\u2066\\r"
+
+
 @pytest.mark.parametrize("fixture", ["unchanged.jsonl", "regression.jsonl", "absent.jsonl"])
 def test_stable_report_schema(fixture):
     schema = json.loads(files("surface_diff").joinpath("schemas/check-report-v1.json").read_text())

@@ -9,7 +9,7 @@ from pathlib import Path
 from surface_diff import __version__
 from surface_diff.analysis import analyze_file
 from surface_diff.comparison import check_file
-from surface_diff.diagnostics import InvalidInput
+from surface_diff.diagnostics import InvalidInput, terminal_text
 from surface_diff.snapshot import write_snapshot
 
 
@@ -40,7 +40,10 @@ def main(argv: list[str] | None = None) -> int:
         print("surfdiff: processing resource limit exceeded; analysis incomplete.", file=sys.stderr)
         return 2
     except InvalidInput as error:
-        print(f"surfdiff: {error.diagnostic.code}: {error.diagnostic.message}", file=sys.stderr)
+        print(
+            terminal_text(f"surfdiff: {error.diagnostic.code}: {error.diagnostic.message}"),
+            file=sys.stderr,
+        )
         return 2
     except (OSError, UnicodeError, ValueError):
         # Close a failed buffered stream so interpreter shutdown cannot retry
@@ -60,16 +63,22 @@ def _execute(args: argparse.Namespace) -> int:
             for item in comparison.diagnostics:
                 line = f":{item.line}" if item.line is not None else ""
                 print(
-                    f"{comparison.diagnostic_source}{line}: {item.code} "
-                    f"{item.path}: {item.message}",
+                    terminal_text(
+                        f"{comparison.diagnostic_source}{line}: {item.code} "
+                        f"{item.path}: {item.message}"
+                    ),
                     file=sys.stderr,
                 )
         elif comparison.changes:
-            print(f"DIFF {comparison.source}: {len(comparison.changes)} structural changes.")
+            print(
+                terminal_text(
+                    f"DIFF {comparison.source}: {len(comparison.changes)} structural changes."
+                )
+            )
             for change in comparison.changes:
-                print(f"  {change.code} {change.path}")
+                print(terminal_text(f"  {change.code} {change.path}"))
         else:
-            print(f"PASS {comparison.source}: no structural differences.")
+            print(terminal_text(f"PASS {comparison.source}: no structural differences."))
         return comparison.exit_code
     analysis = analyze_file(args.input)
     report = analysis.report
@@ -77,20 +86,25 @@ def _execute(args: argparse.Namespace) -> int:
         assert analysis.snapshot is not None
         write_snapshot(args.out, analysis.snapshot)
     if args.command == "snapshot" and report.valid:
-        print(f"Snapshot written: {args.out}")
+        print(terminal_text(f"Snapshot written: {args.out}"))
         return 0
     if getattr(args, "format", "text") == "json":
         print(json.dumps(report.as_dict(), ensure_ascii=True, sort_keys=True))
     elif report.valid:
         print(
-            f"PASS {report.source}: {report.messages_checked} messages validated "
-            "(schemas/lifecycle/final references)."
+            terminal_text(
+                f"PASS {report.source}: {report.messages_checked} messages validated "
+                "(schemas/lifecycle/final references)."
+            )
         )
     else:
         for diagnostic in report.diagnostics:
             line = f":{diagnostic.line}" if diagnostic.line is not None else ""
             print(
-                f"{report.source}{line}: {diagnostic.code} {diagnostic.path}: {diagnostic.message}",
+                terminal_text(
+                    f"{report.source}{line}: {diagnostic.code} "
+                    f"{diagnostic.path}: {diagnostic.message}"
+                ),
                 file=sys.stderr,
             )
     return 0 if report.valid else 2
