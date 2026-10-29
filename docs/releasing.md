@@ -55,9 +55,9 @@ then run (the invocation is the same on Windows/Linux):
 
 ```console
 python -m pip install uv==0.13.6
-uv pip compile pyproject.toml --universal --generate-hashes --no-header -o requirements-runtime.lock
-uv pip compile tools/build-requirements.in --universal --generate-hashes --no-header -o requirements-build.lock
-uv pip compile pyproject.toml --extra dev --universal --no-header -o requirements-dev.lock
+uv pip compile pyproject.toml --python-version 3.12 --universal --generate-hashes --no-header -o requirements-runtime.lock
+uv pip compile tools/build-requirements.in --python-version 3.12 --universal --generate-hashes --no-header -o requirements-build.lock
+uv pip compile pyproject.toml --extra dev --python-version 3.12 --universal --no-header -o requirements-dev.lock
 ```
 
 Review the diff, licenses, and advisories, then rerun all checks and the hosted

@@ -82,7 +82,7 @@ because the sandbox default temporary directory restricts pip build files.
 git diff --check
 ```
 
-Final suite: 187 passed; 99.30% statement coverage (714/719). Uncredited statements
+Final suite: 188 passed; 99.30% statement coverage (714/719). Uncredited statements
 are the module entrypoint and argparse termination handling exercised in child
 processes. Ruff lint/format, strict mypy (14 package/tool modules), pip check,
 artifact metadata and advisory checks passed. Fresh offline artifact installs and
@@ -134,3 +134,9 @@ exact JSON now preserve proper exit1; subprocess regressions cover both formats.
 A doc-update helper was corrected to explicit UTF-8 and affected text repaired.
 All gates and artifact proof are rerun before pushing this repair; the initial
 failed workflow is not acceptance.
+
+Hosted run 40794299240 exposed an omitted Python 3.12 runtime dependency in
+the lock generated using Python 3.13 defaults. Regeneration with explicit
+--python-version 3.12 retains hash-pinned typing-extensions 4.16.0 below 3.13.
+A marker regression and the full fresh-install matrix verify this correction.
+Runtime audits cover five packages locally on 3.13 and six on 3.12.

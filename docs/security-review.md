@@ -81,3 +81,7 @@ Local parser reproduction identified the fault; quoting and regression checks
 repair it without removing a gate. Human output also falls back to escaped
 Unicode when a limited output encoding cannot represent a valid identifier;
 JSON paths and semantic exit codes remain exact.
+
+Python 3.12 also requires typing-extensions 4.16.0 (PSF-2.0 metadata),
+hash-pinned with its Python marker. Local Python 3.13 runtime audits omit this
+inapplicable dependency; hosted Python 3.12 audits and fresh installs include it.

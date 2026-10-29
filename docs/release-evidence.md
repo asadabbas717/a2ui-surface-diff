@@ -14,7 +14,7 @@ checks passed and the milestone was pushed as 331b3c1. See phase3-audit.md.
 
 Windows/Python 3.13.15, portable pinned development environment:
 
-- 187 tests passed, 99.30% statement coverage. Adversarial additions exercise
+- 188 tests passed, 99.30% statement coverage. Adversarial additions exercise
   publication races, read-only/hard-link baselines, byte/shape boundaries,
   expression non-execution, and 10000 sparse slots round-tripped through check.
   Help/version now also return 2 on a closed pipe rather than shutdown code 120,
@@ -69,3 +69,9 @@ escaped text fallback now preserves diff exit1 and exact JSON, with subprocess
 regressions. A maintainer doc-edit helper's locale decoding was corrected using
 explicit UTF-8; normal capture/baseline readers already decode UTF-8 explicitly.
 The failed hosted run is not represented as acceptance; all gates are rerun.
+
+Hosted run 40794299240 exposed an omitted Python 3.12 runtime dependency in
+the lock generated using Python 3.13 defaults. Regeneration with explicit
+--python-version 3.12 retains hash-pinned typing-extensions 4.16.0 below 3.13.
+A marker regression and the full fresh-install matrix verify this correction.
+Runtime audits cover five packages locally on 3.13 and six on 3.12.

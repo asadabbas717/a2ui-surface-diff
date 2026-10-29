@@ -11,6 +11,7 @@ from threading import Barrier
 
 import pytest
 import yaml
+from packaging.requirements import Requirement
 
 from surface_diff import __version__
 from surface_diff.analysis import analyze_file
@@ -28,6 +29,17 @@ def approved():
 
 def test_distribution_metadata_matches_code():
     assert importlib.metadata.version("a2ui-surface-diff") == __version__ == "0.1.0"
+
+
+def test_runtime_lock_retains_python312_conditional_dependency():
+    path = Path(__file__).parent.parent / "requirements-runtime.lock"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    dependency = Requirement(
+        next(line.rstrip(" " + chr(92)) for line in lines if line.startswith("typing-extensions=="))
+    )
+    assert dependency.marker is not None
+    assert dependency.marker.evaluate({"python_full_version": "3.12.15"})
+    assert not dependency.marker.evaluate({"python_full_version": "3.13.15"})
 
 
 def test_ci_workflow_is_valid_yaml_with_scalar_commands():
