@@ -21,7 +21,8 @@ reports can contain application data; keep real data in the ignored `local-data/
 folder. Credential files and common local output folders are ignored as a guard
 against accidental staging, not a guarantee against sharing sensitive files.
 Use only synthetic or carefully redacted examples in public issues and CI.
-See [privacy review](docs/privacy-review.md) for the current release hold.
+See [privacy review](docs/privacy-review.md) for the reviewed safeguards and
+remaining limits of historical-data removal.
 
 ## Install and try
 

@@ -2,9 +2,9 @@
 
 These commands prepare local artifacts. The owner requires GitHub-only
 distribution: do not upload this project to PyPI or another package registry.
-Tested commits/pushes are authorized. A GitHub release remains held until the
-privacy review items in privacy-review.md are resolved; do not change visibility
-or rewrite public history as a routine release step.
+Tested commits/pushes are authorized. Private reporting and owner-authorized history repair are recorded in
+privacy-review.md. Prepare a GitHub draft with reviewed assets and publish only
+on explicit owner approval; do not change visibility or repeat history rewrites.
 
 ## Reproduce the development environment
 

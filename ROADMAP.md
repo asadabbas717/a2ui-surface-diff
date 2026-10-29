@@ -100,3 +100,19 @@ follow-up safeguards are recorded in docs/privacy-review.md and STATE.md. All
 four phases remain complete. First release is held for private-reporting account
 access and the existing public commit-email exposure; no PyPI upload, visibility
 change, history rewrite, or fifth phase is authorized by this follow-up.
+
+## Release-hold resolution — 2026-10-30
+
+Owner supplied authenticated GitHub and authorized changes. Private vulnerability
+reporting enabled and confirmed; existing secret scanning/push protection remain
+on. Main-history author/committer emails repaired with no-reply identities; all
+13 original source trees verified identical and an ignored local recovery bundle
+retained. One initial signature invalidated by metadata editing was removed.
+Use exact force-with-lease for the owner-authorized remote replacement. Historical
+CI references describe original commits; verify the rewritten/final main in CI.
+Cached commits and external copies may still retain old metadata. Do not claim
+total erasure or merge old clones back. Owner declined account-wide email privacy;
+leave that setting unchanged, with future web-commit exposure documented.
+Earlier hold statements are historical; repository holds are addressed by this
+follow-up. Prepare GitHub-only draft assets after verification. Public release
+publication remains a separate explicit owner action; no PyPI. No new phase.

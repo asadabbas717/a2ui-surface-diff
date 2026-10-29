@@ -36,7 +36,7 @@ Distribution documentation now explicitly forbids PyPI uploads. No public
 release, tag, visibility change, new credential, or history rewrite was made.
 Only tested source/documentation commits are pushed under existing authorization.
 
-## Outstanding privacy decisions: release held
+## Initial release holds (historical findings)
 
 Existing public commit metadata contains the owner's personal email. The actual
 address is intentionally not copied here. A no-reply configuration prevents new
@@ -54,3 +54,36 @@ Safe current outcome: keep the existing GitHub source repository, push checked
 privacy safeguards, and hold the first release. No technical knowledge or new
 phase is required from the owner; resolve these specific account/history items
 before deciding to publish reviewed artifacts on GitHub.
+
+## Resolution with owner authorization — 2026-10-30
+
+The owner provided a signed-in GitHub session and authorized changes to resolve
+the holds. Private vulnerability reporting was enabled and GitHub confirmed the
+setting was saved. Existing secret scanning and push protection were confirmed
+enabled and preserved. SECURITY.md now links to the private report form.
+
+The 13-commit main history was reconstructed with the owner's GitHub no-reply
+identity in author/committer metadata. Every commit's tree was checked identical
+to its original tree; no code, tests, messages, timestamps, or user files were
+changed by that operation. One signature on the initial commit was removed
+because the changed metadata invalidates it. A verified recovery bundle and SHA
+mapping remain only in ignored .tmp; do not upload either. Remote replacement
+uses an exact force-with-lease expectation, rejecting concurrent changes.
+
+Previously recorded commit identifiers and CI runs in audit documents describe
+the original historical checks. Rewritten identifiers differ; new CI must pass
+for the final main revision. Existing clones should re-clone or carefully rebase,
+never merge old history back. Normal main ancestry is reviewed for personal email
+again after the push. Cached old commit URLs, old workflow refs, forks, and other
+people's clones may still retain metadata; no claim of total erasure is made.
+GitHub Support controls server-side cache removal. This residual limitation is
+recorded rather than represented as a release blocker that code can eliminate.
+
+The owner explicitly declined changing GitHub's account-wide email-privacy
+setting. It remains unchanged. Future web edits/merges may therefore use the
+account's configured email; local SurfaceDiff commits use no-reply. No login,
+notification email, authentication credentials, or repository visibility changed.
+
+Repository release holds are resolved after the checked main history is pushed.
+Distribution remains GitHub-only. Prepare a reviewed draft first; a draft is not
+a public release. Do not upload real captures, private backups, or environments.

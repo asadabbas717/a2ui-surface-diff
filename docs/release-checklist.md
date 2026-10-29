@@ -26,10 +26,12 @@ result, release-evidence.md for local proof, and releasing.md for commands.
 
 - [x] Delegated limitations/artifact/checksum/privacy review; see privacy-review.md.
 - [x] Owner prohibits PyPI uploads; package-name reservation is not needed.
-- [ ] Confirm a private security reporting channel or GitHub reporting configuration.
-- [ ] Resolve existing public commit-email exposure before a GitHub release.
-  Future local commits use the no-reply identity. Do not rewrite history silently.
-- [ ] GitHub release held pending privacy items; no PyPI or visibility changes.
+- [x] Private vulnerability reporting enabled and confirmed in GitHub settings.
+- [x] Owner authorized main-history metadata repair; all 13 source trees preserved.
+  Local no-reply identity retained. Cached/third-party copies may retain old data.
+- [x] Owner declined account-wide email privacy; setting left unchanged.
+- [x] Repository privacy holds addressed; prepare a GitHub-only draft.
+- [ ] Explicitly approve publishing the prepared GitHub alpha release; no PyPI.
 - [ ] After any authorized publication, verify the real remote version/artifacts
   and record actual URLs. Do not invent release links or claim an upload in advance.
 
