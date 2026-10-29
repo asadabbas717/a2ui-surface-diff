@@ -1,6 +1,18 @@
 # Changelog
 
-## 0.1.0 — prepared, not published
+## 1.0.0 — GitHub alpha, 2026-10-30
+
+- Owner-selected version `v1.0.0`, with matching package/CLI metadata, build
+  verification, filenames, and CI. The alpha/pre-release label is retained;
+  this version number does not expand the MVP or claim production maturity.
+- Private vulnerability reporting enabled; main commit email metadata repaired
+  with all original source trees preserved. Local no-reply identity and ignored
+  credential/application-data folders reduce future accidental exposure.
+- GitHub-only distribution; no PyPI upload. Cached or external copies of old
+  commits may retain original metadata; account-wide email settings remain as
+  explicitly chosen by the owner.
+
+## 0.1.0 — GitHub alpha, 2026-10-30
 
 - Offline A2UI v0.9.1 validation/replay, canonical snapshots, structural checks,
   stable machine reports, and CI exit codes 0/1/2.
@@ -12,9 +24,8 @@
   sanity tooling. Refresh immutable CI action pins to Node 24.
 - Return processing-error code 2 for closed help/version output pipes rather than
   interpreter shutdown code 120.
-- Public compatibility and security limitations are documented. No GitHub release,
-  tag, or package publication was created; development previews below were also
-  unpublished.
+- Published as the initial GitHub alpha before the owner requested v1.0.0.
+  Development previews below were never published; no PyPI upload occurred.
 
 ## 0.1.0.dev3 — unreleased
 

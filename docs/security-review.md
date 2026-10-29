@@ -1,6 +1,6 @@
 # Dependency, license, and security review — 2026-10-29
 
-Scope: prepared SurfaceDiff 0.1.0, its pinned protocol assets, locked runtime
+Scope: SurfaceDiff 1.0.0 alpha, its pinned protocol assets, locked runtime
 dependencies, build tools, development tooling, normal CLI boundaries, and CI.
 This is a dated engineering record, not a promise about future advisories.
 

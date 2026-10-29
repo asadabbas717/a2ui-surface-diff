@@ -1,4 +1,4 @@
-# Release-readiness evidence — prepared 0.1.0
+# Release-readiness evidence — 1.0.0 alpha
 
 Date: 2026-10-29 (Asia/Karachi). Status: all four engineering phases accepted;
 no publication or release. Hosted implementation evidence is recorded below.

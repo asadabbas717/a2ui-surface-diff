@@ -6,7 +6,7 @@ baseline and detects interface structure changes when models or prompts change.
 It does not render interfaces or run a model. It is not endorsed by Google or
 the A2UI maintainers.
 
-**Current status: `0.1.0` prepared locally; not published.** `validate`,
+**Current version: `1.0.0`, alpha/pre-release; GitHub-only distribution.** `validate`,
 `snapshot`, and `check` are implemented. They validate pinned official A2UI v0.9.1 schemas
 (accepting `v0.9` and `v0.9.1` messages), replay captures, and verify lifecycle,
 roots, and final references, then compare captured state against an approved
@@ -50,8 +50,9 @@ DIFF examples/checkout-after.jsonl: 3 structural changes.
 ```
 
 Human text escapes literal backslashes and terminal control characters. JSON
-reports preserve exact decoded paths/values. No package has been published;
-the source installation above is the supported installation for this phase.
+reports preserve exact decoded paths/values. Source and reviewed package assets
+are distributed through [GitHub releases](https://github.com/asadabbas717/a2ui-surface-diff/releases),
+with a SHA256SUMS file. No project package is published to PyPI.
 Snapshot output must be a new path in an existing directory. Existing files,
 including the capture, are never overwritten. Rename a previous demo baseline
 yourself before repeating the snapshot command.

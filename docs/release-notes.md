@@ -1,8 +1,9 @@
-# SurfaceDiff 0.1.0 — prepared release notes
+# SurfaceDiff 1.0.0 — GitHub alpha release notes
 
-Status: local artifacts prepared, not published or released. This is the first
-small public-facing release candidate for owner review, not a production maturity
-claim. SurfaceDiff is independent/unofficial and has no Google/A2UI endorsement.
+Version: v1.0.0 at the owner's request, retaining the alpha/pre-release label.
+This version does not claim production maturity or expand the MVP. Distribution
+is GitHub-only; no PyPI upload. SurfaceDiff is independent/unofficial and has no
+Google/A2UI endorsement. The earlier v0.1.0 alpha is historical.
 
 ## Included
 

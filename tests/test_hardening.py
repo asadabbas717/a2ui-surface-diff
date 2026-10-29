@@ -28,7 +28,7 @@ def approved():
 
 
 def test_distribution_metadata_matches_code():
-    assert importlib.metadata.version("a2ui-surface-diff") == __version__ == "0.1.0"
+    assert importlib.metadata.version("a2ui-surface-diff") == __version__ == "1.0.0"
 
 
 def test_runtime_lock_retains_python312_conditional_dependency():

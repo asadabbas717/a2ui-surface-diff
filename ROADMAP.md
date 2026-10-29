@@ -116,3 +116,13 @@ leave that setting unchanged, with future web-commit exposure documented.
 Earlier hold statements are historical; repository holds are addressed by this
 follow-up. Prepare GitHub-only draft assets after verification. Public release
 publication remains a separate explicit owner action; no PyPI. No new phase.
+
+## Owner version request — 2026-10-30
+
+Owner explicitly approved GitHub alpha upload/publication; v0.1.0 was published
+at commit 82bb225 with four green hosted jobs (run 40969133820). Owner then
+requested v1.0.0. Align actual package/CLI/assets and rerun local and hosted gates
+before publishing 1.0.0, retaining the pre-release label and GitHub-only scope.
+Private reporting and canonical-history email holds are resolved; known cache
+limitations and the declined account email setting remain documented. Preserve
+historical released data. This is release maintenance, not a fifth feature phase.

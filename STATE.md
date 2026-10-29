@@ -1,184 +1,57 @@
 # SurfaceDiff development state
 
-Updated: 2026-10-29 (Asia/Karachi).
+Updated: 2026-10-30 (Asia/Karachi).
 
-## Current milestone and authorization
+## Current state
 
-All four engineering phases are complete and verified. Phase 4 passed its exact
-hosted Windows/Linux Python 3.12/3.13 matrix after the repairs recorded below.
-Phases 1–3 are implemented and independently audited. Target/local artifact version is 0.1.0, still unpublished.
-There is no fifth feature phase. Branch main started clean/synchronized at
-733bcbb51437c559a495b23c1eeadc95007964d3; unrelated user work was not changed.
+All four engineering phases are complete. Owner requested version v1.0.0 after
+explicitly approving GitHub alpha upload/publication. Keep the alpha/pre-release
+label and GitHub-only distribution; no PyPI upload or visibility change.
+The v0.1.0 alpha was published immediately before this version request:
+https://github.com/asadabbas717/a2ui-surface-diff/releases/tag/v0.1.0
+It points to 82bb2254493458ec268873dbb601572a9c7c7564, whose four-job hosted
+matrix passed: https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40969133820
+Do not relabel a 0.1.0 wheel as 1.0.0. Version metadata, tests, verifier, artifact
+names and CI paths now target 1.0.0 and must pass before its GitHub publication.
 
-Remote: https://github.com/asadabbas717/a2ui-surface-diff.git. The owner authorizes
-commit/push of every milestone after checks pass. Tag/release/package upload,
-visibility/security-setting changes remain unauthorized and were not performed.
-Repository description, relevant topics, and Apache-2.0 license were verified and
-preserved. PyPI and the three previously checked similar names returned 404;
-this is not a reservation and must be rechecked before any publication.
+## Privacy holds resolved
 
-## Phase 3 independent audit
+Private vulnerability reporting enabled and confirmed through owner-authenticated
+GitHub. SECURITY.md links to the private report form. Existing secret scanning
+and push protection remain enabled. Owner authorized main-history email repair:
+13 original commit trees were verified identical, author/committer emails changed
+to no-reply, and one invalidated initial signature removed. Remote replacement
+used exact force-with-lease. A fresh remote clone verified private commit emails
+throughout normal history. Ignored local recovery bundle/mapping remain in .tmp;
+never upload them. Re-clone or carefully rebase old clones; do not merge old
+history back. Historical SHA/CI references in audits describe original evidence.
+Cached commits, old workflow refs and external copies may still retain metadata;
+no claim of total erasure is made. See docs/privacy-review.md.
 
-See docs/phase3-audit.md: a Medium terminal control-injection defect was reproduced
-and repaired. Human output now escapes controls/format characters/backslashes,
-while printable Unicode and exact decoded JSON data are preserved. The repaired
-suite passed 172 tests, 99.72% statement coverage, all lint/format/type/dependency/
-build/metadata checks. Milestone 331b3c1 was committed/pushed before Phase 4.
-No Critical/High defect was reproduced in the reviewed scope.
+Owner explicitly declined GitHub account-wide email privacy. Leave that setting
+unchanged. Future web edits/merges may expose configured email; SurfaceDiff local
+commits use no-reply. No credentials, login addresses or notification settings
+were changed. Normal runtime remains offline. Real captures/reports can contain
+sensitive data; ignored local paths are safeguards, not complete protection.
 
-Historical implementation commits: 41355ec Phase 1, 08be30a Phase 1 repair,
-476bda7 Phase 2, 57c9426 Phase 2 repair, c3ffc6b Phase 3, 733bcbb CI evidence.
-Their exact hosted evidence and defects are retained in the phase audit docs.
-Historical green runs do not substitute for the new Phase 4 matrix.
+## Verification and continuity
 
-## Phase 4 delivered
+Previous accepted suite: 188 tests, 99.30% coverage (714/719), Ruff lint/format,
+strict mypy (14 modules), pip check, runtime/development audits, CLI smokes,
+performance sanity, wheel/source build and metadata checks, fresh separate offline
+installs, schema checks, and identical same-platform repeat-build hashes.
+Pinned upstream 4767c140e13b4d8952b92b3bef35b81121dc8810 and vendored raw
+hashes/notices remain unchanged. No runtime dependency or MVP feature expansion.
+Detailed historical phase audits, security/compatibility decisions, commands,
+limits and artifact proof are in docs/phase*-audit.md, docs/release-evidence.md,
+docs/security-review.md, docs/releasing.md and docs/limitations.md.
 
-- Portable exact development lock with platform markers, replacing the Windows
-  version inventory. Runtime/backend locks also include published artifact hashes.
-  Generator: uv 0.13.6 in a maintainer-only environment. No new runtime dependency.
-- Current advisory checks: runtime 5 packages and local Windows development 65
-  applicable packages, no known vulnerability entries or skipped packages. CI
-  audits both locks on each target to include Linux-only development markers.
-- Runtime/build license provenance and upstream attribution review documented in
-  docs/security-review.md; no relicensing or new vendored third-party code.
-- Hardened publication races, read-only/hard-link baseline aliases, exact byte and
-  decoded-shape boundaries, expression non-execution, and sparse index10000
-  round-trip. Normal commands remain offline and never rewrite approved baselines.
-- Fixed a reproduced closed-pipe defect in argparse help/version: shutdown code
-  120 is replaced with processing-error code 2, tested as real subprocesses.
-- Maintainer tools verify fresh separate wheel/source installs offline, installed
-  package origin/version/assets, commands/exits, baseline protection, blocked
-  socket/DNS calls, and same-checkout repeated-build digests. Successful proof
-  writes final dist/SHA256SUMS. Tools reject -O so assertions cannot be stripped.
-- Modest performance workload with correctness assertions and observed timings,
-  not speed thresholds/claims. Detailed observations in docs/release-evidence.md.
-- Reviewed immutable checkout v7.0.1/setup-python v7.1.0 pins, Node24 runtimes,
-  contents:read permissions and disabled credential persistence. CI now includes
-  advisories, performance observation, and fresh/reproducible artifact proof.
-- Complete README/contributing/security/changelog, architecture/contracts,
-  limitations, maintainer procedure, release notes/checklist, and evidence.
+## Next required step
 
-## Verification performed locally
-
-Windows, Python 3.13.15. Native NTFS permissions were necessary for hard links;
-assertions were executed, not skipped/weakened. Project-local TEMP/TMP were used
-because the sandbox default temporary directory restricts pip build files.
-
-```powershell
-.venv\Scripts\python -m pip install -r requirements-dev.lock
-.venv\Scripts\python -m pip install --no-build-isolation --no-deps -e .
-.venv\Scripts\python -m pytest --basetemp=.tmp/phase4-lock-repair --cov-report=xml
-.venv\Scripts\python -m ruff check .
-.venv\Scripts\python -m ruff format --check .
-.venv\Scripts\python -m mypy
-.venv\Scripts\python -m pip check
-.venv\Scripts\python -m pip_audit --strict --disable-pip --require-hashes -r requirements-runtime.lock --format json --output .tmp/runtime-audit.json --progress-spinner off
-.venv\Scripts\python -m pip_audit --strict --disable-pip --no-deps -r requirements-dev.lock --format json --output .tmp/development-audit.json --progress-spinner off
-.venv\Scripts\python tools/performance_sanity.py
-.venv\Scripts\python -m build --no-isolation
-.venv\Scripts\python -m twine check dist/a2ui_surface_diff-0.1.0*
-.venv\Scripts\python -m pip download --only-binary=:all: --require-hashes -r requirements-runtime.lock -r requirements-build.lock --dest .tmp/wheelhouse
-.venv\Scripts\python tools/verify_artifacts.py --wheel dist/a2ui_surface_diff-0.1.0-py3-none-any.whl --sdist dist/a2ui_surface_diff-0.1.0.tar.gz --wheelhouse .tmp/wheelhouse
-git diff --check
-```
-
-Final suite: 188 passed; 99.30% statement coverage (714/719). Uncredited statements
-are the module entrypoint and argparse termination handling exercised in child
-processes. Ruff lint/format, strict mypy (14 package/tool modules), pip check,
-artifact metadata and advisory checks passed. Fresh offline artifact installs and
-repeated-build digests passed; final documentation artifacts are rebuilt using
-the same verification procedure. See release-evidence.md and releasing.md for scope/commands.
-
-## Contracts and remaining limits
-
-Pinned upstream revision: 4767c140e13b4d8952b92b3bef35b81121dc8810; upstream hashes
-and notices unchanged. Supports official v0.9/v0.9.1 envelopes and two documented
-Basic Catalog IDs, with explicit SDK/schema/null/pointer differences. No v0.8,
-v1.0, custom catalogs, rendering, model calls, evaluation, or auto-approvals.
-Snapshot wrapper1, validation report2, check report1 are unchanged. Consumers
-select report contracts by command/version. Booleans differ from numbers; numeric
-1 and 1.0 compare equal. Absent/null/undefined remain distinct. JSON can contain
-sensitive application values; text has controls escaped.
-
-Capture limits: 16 MiB, 1 MiB per physical line, 10000 messages, 100000 nodes and
-depth64/message. Replay: 1000 active surfaces, 20000 components, combined model
-nodes200000/depth64, max array index10000. Snapshot/baseline: 64 MiB, 1M nodes,
-depth80. Comparison: 20000 changes and 32 MiB serialized change-payload budget;
-incomplete analysis fails with code2, never a partial successful comparison.
-
-Remaining explicit limits: no wall-time sandbox or power-loss durability, required
-hard-link support, positional array diffing, no complete-message truncation signal,
-and no exhaustive verification of newer Python/platform/dependency combinations.
-Nested schema guidance/heuristic alignment remain optional future improvements,
-not known Critical/High defects or promised phase-five scope. Advisory results are
-dated evidence, not a guarantee of vulnerability absence. See limitations.md.
-
-## Exact next step
-
-All four phases are accepted; no fifth phase is planned. Owner review of the
-0.1.0 artifacts/limitations is next. Confirm a private security reporting channel
-and obtain explicit publication/tag/release approval before publishing anything.
-Recheck package name and advisories immediately before authorized publication.
-Tested milestone commits/pushes remain authorized. No publication was performed.
-
-## Phase 4 repair before acceptance
-
-80f5d9c6e1476689a4c7f65f70c8a0a2b62d5777 failed workflow validation before jobs
-(run 40792546162). An unquoted colon-space was reproduced as YAML ScannerError
-at line38, quoted, and covered by a safe parser/scalar-run regression. PyYAML
-6.0.3 is development-only; 65 applicable Windows development packages audited
-with no known vulnerability entries or skips. A Windows-locale test also found
-that valid Unicode diff paths failed on ASCII output. Escaped text fallback and
-exact JSON now preserve proper exit1; subprocess regressions cover both formats.
-A doc-update helper was corrected to explicit UTF-8 and affected text repaired.
-All gates and artifact proof are rerun before pushing this repair; the initial
-failed workflow is not acceptance.
-
-Hosted run 40794299240 exposed an omitted Python 3.12 runtime dependency in
-the lock generated using Python 3.13 defaults. Regeneration with explicit
---python-version 3.12 retains hash-pinned typing-extensions 4.16.0 below 3.13.
-A marker regression and the full fresh-install matrix verify this correction.
-Runtime audits cover five packages locally on 3.13 and six on 3.12.
-
-## Observed hosted acceptance
-
-Implementation 02bd7ca5c96ac585a22a1b94f2830ab00418d21a passed all four jobs:
-https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40794910578
-
-Each job executed 188 tests, coverage, Ruff/format, strict typing, pip check,
-both advisory checks, CLI smokes, performance sanity, build/twine, hash-locked
-fresh wheel/source installs, and same-checkout repeat-build verification.
-Phase 3 repair 331b3c1 also passed hosted run 40787954110. Initial failed
-runs 40792546162 and 40794299240 are retained as repair evidence, not acceptance.
-Documentation-only follow-up records this observed implementation result; inspect
-its own latest run separately rather than assuming a result in advance.
-
-## Owner privacy review — 2026-10-30
-
-All phases remain complete. Owner delegates release/privacy review and requires
-GitHub-only distribution; no PyPI publication. See docs/privacy-review.md.
-Tracked files, historical blobs, commit metadata and artifact contents reviewed;
-no credential pattern matched. Existing personal email in public commit metadata
-is a remaining privacy concern. Future local commits now use GitHub no-reply.
-Added ignored local credential/data/output paths and explicit sharing guidance.
-Private reporting cannot be verified/enabled: browser is signed out and connected
-tools lack the required security-setting capability. Hold the first GitHub
-release pending that account check and an explicit history-remediation decision.
-Do not force-push, change visibility, or upload a package as an inferred remedy.
-This section supersedes earlier PyPI/name-check next steps. No fifth phase.
-
-## Release-hold resolution — 2026-10-30
-
-Owner supplied authenticated GitHub and authorized changes. Private vulnerability
-reporting enabled and confirmed; existing secret scanning/push protection remain
-on. Main-history author/committer emails repaired with no-reply identities; all
-13 original source trees verified identical and an ignored local recovery bundle
-retained. One initial signature invalidated by metadata editing was removed.
-Use exact force-with-lease for the owner-authorized remote replacement. Historical
-CI references describe original commits; verify the rewritten/final main in CI.
-Cached commits and external copies may still retain old metadata. Do not claim
-total erasure or merge old clones back. Owner declined account-wide email privacy;
-leave that setting unchanged, with future web-commit exposure documented.
-Earlier hold statements are historical; repository holds are addressed by this
-follow-up. Prepare GitHub-only draft assets after verification. Public release
-publication remains a separate explicit owner action; no PyPI. No new phase.
+Run version-1.0.0 local gates and artifact/privacy checks, commit/push the tested
+milestone, and verify all Windows/Linux Python 3.12/3.13 CI jobs for that exact
+commit. Publish only the reviewed 1.0.0 wheel/source/SHA256SUMS to the approved
+GitHub alpha release; verify remote asset hashes, tag commit and pre-release flag.
+Record actual release and CI URLs after observing them. Preserve the historical
+v0.1.0 release and tag rather than deleting published data without approval.
+No fifth phase, PyPI upload, paid service or unsolicited feature work.

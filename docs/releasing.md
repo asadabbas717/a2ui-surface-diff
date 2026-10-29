@@ -33,7 +33,7 @@ publishing. Performance output is one observed workload, not a speed guarantee.
 python -m build --no-isolation
 python -m twine check dist/*
 python -m pip download --only-binary=:all: --require-hashes -r requirements-runtime.lock -r requirements-build.lock --dest .tmp/wheelhouse
-python tools/verify_artifacts.py --wheel dist/a2ui_surface_diff-0.1.0-py3-none-any.whl --sdist dist/a2ui_surface_diff-0.1.0.tar.gz --wheelhouse .tmp/wheelhouse
+python tools/verify_artifacts.py --wheel dist/a2ui_surface_diff-1.0.0-py3-none-any.whl --sdist dist/a2ui_surface_diff-1.0.0.tar.gz --wheelhouse .tmp/wheelhouse
 ```
 
 The verifier rebuilds from the same checkout, compares both artifact digests,

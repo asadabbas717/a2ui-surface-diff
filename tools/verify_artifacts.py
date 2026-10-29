@@ -21,7 +21,7 @@ import surface_diff
 from surface_diff.cli import main
 package_path = pathlib.Path(surface_diff.__file__).resolve()
 assert package_path.is_relative_to(pathlib.Path(sys.prefix).resolve())
-assert surface_diff.__version__ == importlib.metadata.version("a2ui-surface-diff") == "0.1.0"
+assert surface_diff.__version__ == importlib.metadata.version("a2ui-surface-diff") == "1.0.0"
 assets = files("surface_diff").joinpath("schemas")
 manifest = json.loads(assets.joinpath("SHA256SUMS.json").read_text(encoding="utf-8"))
 for name, digest in manifest.items():
@@ -134,7 +134,7 @@ def main() -> None:
             probe.mkdir()
             run([str(python), "-c", PROBE], probe)
             command = scripts / ("surfdiff.exe" if os.name == "nt" else "surfdiff")
-            if run([str(command), "--version"], probe).strip() != "surfdiff 0.1.0":
+            if run([str(command), "--version"], probe).strip() != "surfdiff 1.0.0":
                 raise RuntimeError("Installed entrypoint version mismatch")
             evidence[artifact.name] = digest(artifact)
     manifest = "".join(f"{checksum}  {name}\n" for name, checksum in sorted(evidence.items()))

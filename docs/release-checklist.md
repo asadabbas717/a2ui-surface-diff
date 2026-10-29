@@ -1,4 +1,4 @@
-# Owner release checklist — prepared 0.1.0
+# Owner release checklist — 1.0.0 alpha
 
 Engineering preparation is complete only after the exact Phase 4 implementation
 commit passes the refreshed four-job hosted matrix. See STATE.md for the observed
@@ -31,7 +31,8 @@ result, release-evidence.md for local proof, and releasing.md for commands.
   Local no-reply identity retained. Cached/third-party copies may retain old data.
 - [x] Owner declined account-wide email privacy; setting left unchanged.
 - [x] Repository privacy holds addressed; prepare a GitHub-only draft.
-- [ ] Explicitly approve publishing the prepared GitHub alpha release; no PyPI.
+- [x] Owner explicitly approved asset upload and GitHub alpha publication,
+  then requested v1.0.0; align package/assets and verify that revision first.
 - [ ] After any authorized publication, verify the real remote version/artifacts
   and record actual URLs. Do not invent release links or claim an upload in advance.
 

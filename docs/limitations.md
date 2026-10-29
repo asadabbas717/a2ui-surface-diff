@@ -1,4 +1,4 @@
-# Supported scope and limitations for prepared 0.1.0
+# Supported scope and limitations for 1.0.0 alpha
 
 The three commands validate/replay supported streams, record canonical snapshots,
 and compare final structural state against a validated baseline. These are

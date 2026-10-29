@@ -87,3 +87,13 @@ notification email, authentication credentials, or repository visibility changed
 Repository release holds are resolved after the checked main history is pushed.
 Distribution remains GitHub-only. Prepare a reviewed draft first; a draft is not
 a public release. Do not upload real captures, private backups, or environments.
+
+## Observed remote verification and owner version request
+
+Remote main 82bb225 passed all four hosted jobs in run 40969133820. A fresh clone
+found 14 reachable commits and no personal email in author/committer metadata.
+Artifact checksums and privacy patterns passed. Owner explicitly approved
+uploading all three verified assets and publishing the GitHub alpha; v0.1.0 was
+published at that exact commit. Owner then requested v1.0.0; package version and
+artifacts must match that requested version before the next approved GitHub alpha
+publication. Preserve the historical release rather than silently deleting it.
