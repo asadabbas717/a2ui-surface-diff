@@ -4,15 +4,22 @@ Updated: 2026-10-30 (Asia/Karachi).
 
 ## Current state
 
-All four engineering phases are complete. Owner requested version v1.0.0 after
-explicitly approving GitHub alpha upload/publication. Keep the alpha/pre-release
-label and GitHub-only distribution; no PyPI upload or visibility change.
-The v0.1.0 alpha was published immediately before this version request:
-https://github.com/asadabbas717/a2ui-surface-diff/releases/tag/v0.1.0
-It points to 82bb2254493458ec268873dbb601572a9c7c7564, whose four-job hosted
-matrix passed: https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40969133820
-Do not relabel a 0.1.0 wheel as 1.0.0. Version metadata, tests, verifier, artifact
-names and CI paths now target 1.0.0 and must pass before its GitHub publication.
+All four engineering phases are complete. Owner-approved v1.0.0 is published
+as a GitHub alpha/pre-release, with matching package/CLI/artifact metadata:
+https://github.com/asadabbas717/a2ui-surface-diff/releases/tag/v1.0.0
+
+Release tag v1.0.0 is fixed at 507f4a5dde26981d586044143beb5187a7037c4a.
+Its four-job Windows/Linux Python 3.12/3.13 matrix passed:
+https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40969929111
+
+Release API confirmed draft=false, prerelease=true, and exactly three uploaded
+assets: 1.0.0 wheel, 1.0.0 source archive and SHA256SUMS. Downloaded all three
+from the public release and verified byte identity against the reviewed local
+build and the manifest. GitHub adds its two source-code downloads separately.
+No PyPI upload, paid service, visibility change or runtime feature expansion.
+The earlier v0.1.0 alpha remains historical; it was published immediately before
+the owner's version change. No published release/tag was deleted or retargeted.
+This documentation follow-up does not change the immutable release commit/assets.
 
 ## Privacy holds resolved
 
@@ -46,12 +53,17 @@ Detailed historical phase audits, security/compatibility decisions, commands,
 limits and artifact proof are in docs/phase*-audit.md, docs/release-evidence.md,
 docs/security-review.md, docs/releasing.md and docs/limitations.md.
 
+## Verified release artifacts
+
+- a2ui_surface_diff-1.0.0-py3-none-any.whl:
+  a213cd2269c9a8981485f84f4d6474043ba5f7af9aa82c23065d9eec18894e1f
+- a2ui_surface_diff-1.0.0.tar.gz:
+  f7edbbeee5b43017c78f5d1578c026a971e4f543125f6eb9a9304e51f5017179
+
 ## Next required step
 
-Run version-1.0.0 local gates and artifact/privacy checks, commit/push the tested
-milestone, and verify all Windows/Linux Python 3.12/3.13 CI jobs for that exact
-commit. Publish only the reviewed 1.0.0 wheel/source/SHA256SUMS to the approved
-GitHub alpha release; verify remote asset hashes, tag commit and pre-release flag.
-Record actual release and CI URLs after observing them. Preserve the historical
-v0.1.0 release and tag rather than deleting published data without approval.
-No fifth phase, PyPI upload, paid service or unsolicited feature work.
+No release hold or development phase remains. Use the GitHub alpha within its
+documented scope and report vulnerabilities privately. Retain the owner-selected
+account privacy setting and never upload real captures or local recovery data.
+Future work requires a concrete owner request; no automatic release, history
+rewrite, PyPI publication, or feature expansion. Keep tag v1.0.0 immutable.

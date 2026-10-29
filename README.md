@@ -6,7 +6,7 @@ baseline and detects interface structure changes when models or prompts change.
 It does not render interfaces or run a model. It is not endorsed by Google or
 the A2UI maintainers.
 
-**Current version: `1.0.0`, alpha/pre-release; GitHub-only distribution.** `validate`,
+**Current release: [v1.0.0 — alpha/pre-release](https://github.com/asadabbas717/a2ui-surface-diff/releases/tag/v1.0.0); GitHub-only distribution.** `validate`,
 `snapshot`, and `check` are implemented. They validate pinned official A2UI v0.9.1 schemas
 (accepting `v0.9` and `v0.9.1` messages), replay captures, and verify lifecycle,
 roots, and final references, then compare captured state against an approved

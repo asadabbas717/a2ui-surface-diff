@@ -32,3 +32,21 @@ Resource limits can reject oversized inputs/comparisons and do not impose a wall
 clock sandbox. Snapshot publication requires hard-link support and is not a
 power-loss durability guarantee. See limitations.md, snapshots.md, reports.md,
 and release-evidence.md for exact contracts and verified results.
+
+## Observed v1.0.0 publication — 2026-10-30
+
+Owner-approved GitHub alpha/pre-release is public:
+https://github.com/asadabbas717/a2ui-surface-diff/releases/tag/v1.0.0
+
+Tag v1.0.0 points to 507f4a5dde26981d586044143beb5187a7037c4a.
+All four exact-commit hosted jobs passed:
+https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40969929111
+
+Local suite: 188 passed, 99.30% coverage; lint/format/types/pip check and fresh
+offline wheel/source installations/repeated-build hashes passed. Downloaded the
+three published assets and checked byte identity and SHA256SUMS against the
+reviewed local build. Release API confirmed non-draft, pre-release=true and the
+three expected asset names. No PyPI upload. The earlier v0.1.0 alpha is historical;
+no published data was deleted. This supersedes earlier pending-release steps.
+Remaining cache/external-copy privacy limitations are documented, not claimed
+to be erased. Account-wide email privacy remains unchanged at owner request.

@@ -33,8 +33,9 @@ result, release-evidence.md for local proof, and releasing.md for commands.
 - [x] Repository privacy holds addressed; prepare a GitHub-only draft.
 - [x] Owner explicitly approved asset upload and GitHub alpha publication,
   then requested v1.0.0; align package/assets and verify that revision first.
-- [ ] After any authorized publication, verify the real remote version/artifacts
-  and record actual URLs. Do not invent release links or claim an upload in advance.
+- [x] Published v1.0.0 alpha at verified commit 507f4a5; exact matrix passed
+  (run 40969929111). Downloaded all three release assets; bytes/hashes matched.
+  Actual URL: https://github.com/asadabbas717/a2ui-surface-diff/releases/tag/v1.0.0
 
 No paid infrastructure, publishing credentials/workflow, automatic baseline
 approval, or release automation is included. All four engineering phases end at
