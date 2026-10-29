@@ -92,3 +92,11 @@ Acceptance: source installation exposes `surfdiff`; official examples validate;
 malformed/unsupported input returns 2 with file and physical line diagnostics;
 resource limits fail predictably; runtime requires no network; tests and quality
 checks pass. Lifecycle validation remains explicitly deferred to Phase 2.
+
+## Post-phase owner review — 2026-10-30
+
+Owner requires GitHub-only distribution and delegates privacy review. Safe
+follow-up safeguards are recorded in docs/privacy-review.md and STATE.md. All
+four phases remain complete. First release is held for private-reporting account
+access and the existing public commit-email exposure; no PyPI upload, visibility
+change, history rewrite, or fifth phase is authorized by this follow-up.

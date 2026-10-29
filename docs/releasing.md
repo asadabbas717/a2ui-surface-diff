@@ -1,8 +1,10 @@
 # Maintainer verification and release procedure
 
-These commands prepare local artifacts, not a publication. Never create a tag,
-GitHub release, PyPI upload, or visibility change without explicit owner approval.
-The existing owner authorization covers tested commits/pushes only.
+These commands prepare local artifacts. The owner requires GitHub-only
+distribution: do not upload this project to PyPI or another package registry.
+Tested commits/pushes are authorized. A GitHub release remains held until the
+privacy review items in privacy-review.md are resolved; do not change visibility
+or rewrite public history as a routine release step.
 
 ## Reproduce the development environment
 
@@ -68,9 +70,9 @@ dependency was added during release hardening.
 
 ## Owner's final publication decisions
 
-Review the release checklist, limitations, and exact CI commit; recheck PyPI name
-availability (404 does not reserve it). Confirm a private security reporting
-channel and approve any desired tag/release/upload explicitly. There are no
-publish credentials, upload workflow, automatic approval, or release automation
-in this repository. Follow-up work after all four phases is an audit or a new
-owner-scoped request, not an invented fifth phase.
+Review the release checklist, limitations, exact CI commit, and privacy-review.md.
+PyPI name checks and PyPI uploads are out of scope by owner instruction. Only
+reviewed wheel/source artifacts and SHA256SUMS may be considered for a future
+GitHub release. Never attach captures, local environments, credentials, reports,
+or working-directory ZIP archives. Confirm a private reporting channel first.
+No release or history rewrite is performed by this procedure automatically.

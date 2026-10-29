@@ -22,13 +22,14 @@ result, release-evidence.md for local proof, and releasing.md for commands.
 - [x] Existing repository description/topics/license inspected and preserved.
   PyPI and the three previously checked similar names returned 404 on 2026-10-29.
 
-## Owner decisions before publication (not performed)
+## Owner review follow-up — GitHub only
 
-- [ ] Review limitations and artifacts/checksums for the verified commit.
-- [ ] Recheck name availability; a prior 404 is not a reservation.
+- [x] Delegated limitations/artifact/checksum/privacy review; see privacy-review.md.
+- [x] Owner prohibits PyPI uploads; package-name reservation is not needed.
 - [ ] Confirm a private security reporting channel or GitHub reporting configuration.
-- [ ] Explicitly authorize any desired tag, GitHub release, PyPI publication, or
-  visibility change. Tested commits/pushes are already authorized; publishing is not.
+- [ ] Resolve existing public commit-email exposure before a GitHub release.
+  Future local commits use the no-reply identity. Do not rewrite history silently.
+- [ ] GitHub release held pending privacy items; no PyPI or visibility changes.
 - [ ] After any authorized publication, verify the real remote version/artifacts
   and record actual URLs. Do not invent release links or claim an upload in advance.
 

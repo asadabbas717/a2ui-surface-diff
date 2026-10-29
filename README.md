@@ -13,6 +13,16 @@ roots, and final references, then compare captured state against an approved
 snapshot. Tested targets are Windows/Linux with Python 3.12/3.13; see
 [release evidence](docs/release-evidence.md) for verified checks and limitations.
 
+## Privacy and distribution
+
+Distribution is GitHub-only; this project is not published to PyPI. Normal CLI
+commands work offline and do not upload captures or reports. Snapshots and JSON
+reports can contain application data; keep real data in the ignored `local-data/`
+folder. Credential files and common local output folders are ignored as a guard
+against accidental staging, not a guarantee against sharing sensitive files.
+Use only synthetic or carefully redacted examples in public issues and CI.
+See [privacy review](docs/privacy-review.md) for the current release hold.
+
 ## Install and try
 
 Python 3.12+ is required. From this source directory:

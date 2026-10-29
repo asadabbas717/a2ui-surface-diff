@@ -9,3 +9,17 @@ htmlcov/
 dist/
 *.egg-info/
 .tmp/
+
+# Local credentials and sensitive application data (explicit opt-in to share).
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+/local-data/
+/captures/
+/snapshots/
+/reports/
+/baseline.json

@@ -152,3 +152,17 @@ Phase 3 repair 331b3c1 also passed hosted run 40787954110. Initial failed
 runs 40792546162 and 40794299240 are retained as repair evidence, not acceptance.
 Documentation-only follow-up records this observed implementation result; inspect
 its own latest run separately rather than assuming a result in advance.
+
+## Owner privacy review — 2026-10-30
+
+All phases remain complete. Owner delegates release/privacy review and requires
+GitHub-only distribution; no PyPI publication. See docs/privacy-review.md.
+Tracked files, historical blobs, commit metadata and artifact contents reviewed;
+no credential pattern matched. Existing personal email in public commit metadata
+is a remaining privacy concern. Future local commits now use GitHub no-reply.
+Added ignored local credential/data/output paths and explicit sharing guidance.
+Private reporting cannot be verified/enabled: browser is signed out and connected
+tools lack the required security-setting capability. Hold the first GitHub
+release pending that account check and an explicit history-remediation decision.
+Do not force-push, change visibility, or upload a package as an inferred remedy.
+This section supersedes earlier PyPI/name-check next steps. No fifth phase.
