@@ -1,7 +1,7 @@
 # Release-readiness evidence — prepared 0.1.0
 
-Date: 2026-10-29 (Asia/Karachi). Status: engineering verification in progress until
-the final exact hosted commit is recorded in STATE.md; no publication or release.
+Date: 2026-10-29 (Asia/Karachi). Status: all four engineering phases accepted;
+no publication or release. Hosted implementation evidence is recorded below.
 
 ## Previous-phase audit
 
@@ -75,3 +75,14 @@ the lock generated using Python 3.13 defaults. Regeneration with explicit
 --python-version 3.12 retains hash-pinned typing-extensions 4.16.0 below 3.13.
 A marker regression and the full fresh-install matrix verify this correction.
 Runtime audits cover five packages locally on 3.13 and six on 3.12.
+
+## Observed hosted acceptance
+
+Implementation 02bd7ca5c96ac585a22a1b94f2830ab00418d21a passed all four jobs:
+https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40794910578
+
+Ubuntu/Windows and Python 3.12/3.13 each passed 188 tests and every configured
+gate, including both advisory checks and fresh/reproducible artifact proof.
+Same-platform repeat builds were identical; cross-platform archive hash identity
+is not claimed. Final local artifacts and dist/SHA256SUMS are regenerated after
+this documentation update. No tag, release, or package publication occurred.

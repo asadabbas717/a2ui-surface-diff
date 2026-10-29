@@ -17,8 +17,8 @@ result, release-evidence.md for local proof, and releasing.md for commands.
   separate offline installations with runtime network calls blocked.
 - [x] Complete README, contributing/security/changelog, architecture, compatibility,
   limitations, snapshot/comparison/report contracts, release notes, and evidence.
-- [ ] Verify the exact final implementation's Ubuntu/Windows Python 3.12/3.13 CI.
-  Historical green runs do not satisfy this checkbox; update after observing it.
+- [x] Exact implementation 02bd7ca passed Ubuntu/Windows Python 3.12/3.13 CI,
+  run 40794910578; all four jobs and artifact/advisory gates succeeded.
 - [x] Existing repository description/topics/license inspected and preserved.
   PyPI and the three previously checked similar names returned 404 on 2026-10-29.
 

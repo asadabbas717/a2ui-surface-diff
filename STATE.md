@@ -4,9 +4,9 @@ Updated: 2026-10-29 (Asia/Karachi).
 
 ## Current milestone and authorization
 
-Phase 4 release-readiness implementation is complete locally, pending its exact
-refreshed hosted matrix before final acceptance. Phases 1–3 are implemented and
-independently audited. Target/local artifact version is 0.1.0, still unpublished.
+All four engineering phases are complete and verified. Phase 4 passed its exact
+hosted Windows/Linux Python 3.12/3.13 matrix after the repairs recorded below.
+Phases 1–3 are implemented and independently audited. Target/local artifact version is 0.1.0, still unpublished.
 There is no fifth feature phase. Branch main started clean/synchronized at
 733bcbb51437c559a495b23c1eeadc95007964d3; unrelated user work was not changed.
 
@@ -67,7 +67,7 @@ because the sandbox default temporary directory restricts pip build files.
 ```powershell
 .venv\Scripts\python -m pip install -r requirements-dev.lock
 .venv\Scripts\python -m pip install --no-build-isolation --no-deps -e .
-.venv\Scripts\python -m pytest --basetemp=.tmp/phase4-encoding-repair --cov-report=xml
+.venv\Scripts\python -m pytest --basetemp=.tmp/phase4-lock-repair --cov-report=xml
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python -m ruff format --check .
 .venv\Scripts\python -m mypy
@@ -86,8 +86,8 @@ Final suite: 188 passed; 99.30% statement coverage (714/719). Uncredited stateme
 are the module entrypoint and argparse termination handling exercised in child
 processes. Ruff lint/format, strict mypy (14 package/tool modules), pip check,
 artifact metadata and advisory checks passed. Fresh offline artifact installs and
-repeated-build digests passed; repeat with final docs before pushing the tested
-milestone. See release-evidence.md and releasing.md for scope/commands.
+repeated-build digests passed; final documentation artifacts are rebuilt using
+the same verification procedure. See release-evidence.md and releasing.md for scope/commands.
 
 ## Contracts and remaining limits
 
@@ -115,12 +115,11 @@ dated evidence, not a guarantee of vulnerability absence. See limitations.md.
 
 ## Exact next step
 
-Commit/push the tested Phase 4 milestone, inspect all four refreshed hosted jobs,
-repair any failure, and record actual commit/run evidence. Only then mark Phase 4
-accepted. After all four phases, await owner artifact/release review; confirm a
-private security reporting channel and obtain explicit publication/tag/release
-approval. Recheck package name and advisories immediately before any authorized
-publication. Do not publish or invent another development phase automatically.
+All four phases are accepted; no fifth phase is planned. Owner review of the
+0.1.0 artifacts/limitations is next. Confirm a private security reporting channel
+and obtain explicit publication/tag/release approval before publishing anything.
+Recheck package name and advisories immediately before authorized publication.
+Tested milestone commits/pushes remain authorized. No publication was performed.
 
 ## Phase 4 repair before acceptance
 
@@ -140,3 +139,16 @@ the lock generated using Python 3.13 defaults. Regeneration with explicit
 --python-version 3.12 retains hash-pinned typing-extensions 4.16.0 below 3.13.
 A marker regression and the full fresh-install matrix verify this correction.
 Runtime audits cover five packages locally on 3.13 and six on 3.12.
+
+## Observed hosted acceptance
+
+Implementation 02bd7ca5c96ac585a22a1b94f2830ab00418d21a passed all four jobs:
+https://github.com/asadabbas717/a2ui-surface-diff/actions/runs/40794910578
+
+Each job executed 188 tests, coverage, Ruff/format, strict typing, pip check,
+both advisory checks, CLI smokes, performance sanity, build/twine, hash-locked
+fresh wheel/source installs, and same-checkout repeat-build verification.
+Phase 3 repair 331b3c1 also passed hosted run 40787954110. Initial failed
+runs 40792546162 and 40794299240 are retained as repair evidence, not acceptance.
+Documentation-only follow-up records this observed implementation result; inspect
+its own latest run separately rather than assuming a result in advance.

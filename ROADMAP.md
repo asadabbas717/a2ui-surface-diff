@@ -8,9 +8,15 @@ Phase 2: audited and repaired; local acceptance passes. The original Phase 2
 revision passed the full hosted matrix; see `docs/phase2-audit.md`.
 The owner has authorized Phase 3 and committing/pushing tested milestones.
 Phase 3 is complete and pushed as c3ffc6b. Hosted run 40786664420 passed the
-full Windows/Linux and Python 3.12/3.13 matrix. Phase 4 has not started.
+full Windows/Linux and Python 3.12/3.13 matrix.
 Phase 3 has now passed independent review after a terminal-output repair; see
 `docs/phase3-audit.md`. The owner authorizes the next single phase and tested pushes.
+
+Phase 4 is complete and accepted after the repairs recorded in STATE.md.
+Implementation 02bd7ca passed all four refreshed hosted jobs (run 40794910578),
+188 tests per target, audits, and fresh/reproducible artifact checks. All four
+phases are complete. Next: owner artifact/release review and explicit permission
+before any publishing/tag/release action; no fifth phase is implied.
 
 ## Phase 4 scope and acceptance
 

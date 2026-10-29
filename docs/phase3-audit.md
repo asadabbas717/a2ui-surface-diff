@@ -48,3 +48,6 @@ consistency, build, and artifact metadata checks pass. Native filesystem permiss
 were used for NTFS hard-link tests. Verdict: **PASS after repair** for Phase 3.
 Historical hosted success is not a claim that this repair has already run in CI.
 The tested repair is committed/pushed before implementing Phase 4.
+
+Observed follow-up: repair 331b3c125ab0e8b6a1c9c318f01f0580cb23d9ef passed
+all four hosted jobs in run 40787954110 before Phase 4 implementation.
