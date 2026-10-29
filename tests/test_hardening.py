@@ -10,6 +10,7 @@ from pathlib import Path
 from threading import Barrier
 
 import pytest
+import yaml
 
 from surface_diff import __version__
 from surface_diff.analysis import analyze_file
@@ -27,6 +28,52 @@ def approved():
 
 def test_distribution_metadata_matches_code():
     assert importlib.metadata.version("a2ui-surface-diff") == __version__ == "0.1.0"
+
+
+def test_ci_workflow_is_valid_yaml_with_scalar_commands():
+    path = Path(__file__).parent.parent / ".github" / "workflows" / "ci.yml"
+    workflow = yaml.safe_load(path.read_text(encoding="utf-8"))
+    for job in workflow["jobs"].values():
+        for step in job["steps"]:
+            if "run" in step:
+                assert isinstance(step["run"], str)
+
+
+@pytest.mark.parametrize("report_format", ["text", "json"])
+def test_unicode_paths_survive_ascii_output(tmp_path, report_format):
+    key = "اردو"
+    value = approved()
+    value["surfaces"]["s"]["dataModel"] = {key: 0}
+    baseline = tmp_path / "baseline.json"
+    baseline.write_bytes(serialize_snapshot(value))
+    capture = tmp_path / "unicode.jsonl"
+    update = {"version": "v0.9.1", "updateDataModel": {"surfaceId": "s", "value": {key: 1}}}
+    capture.write_text(
+        (FIXTURES / "unchanged.jsonl").read_text(encoding="utf-8") + "\n" + json.dumps(update),
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "surface_diff",
+            "check",
+            str(capture),
+            "--baseline",
+            str(baseline),
+            "--format",
+            report_format,
+        ],
+        env={**os.environ, "PYTHONIOENCODING": "ascii"},
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 1 and result.stderr == b""
+    text = result.stdout.decode("ascii")
+    if report_format == "json":
+        assert json.loads(text)["changes"][0]["path"] == "/surfaces/s/dataModel/" + key
+    else:
+        assert "DATA_CHANGED" in text and "\\u0627\\u0631\\u062f\\u0648" in text
 
 
 @pytest.mark.parametrize("argument", ["--help", "--version"])

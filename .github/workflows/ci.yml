@@ -35,5 +35,5 @@ jobs:
       - run: surfdiff check examples/hello.jsonl --baseline "${{ runner.temp }}/surfdiff-baseline.json" --format json
       - run: python -m build --no-isolation
       - run: python -m twine check dist/*
-      - run: python -m pip download --only-binary=:all: --require-hashes -r requirements-runtime.lock -r requirements-build.lock --dest .tmp/wheelhouse
+      - run: 'python -m pip download --only-binary=:all: --require-hashes -r requirements-runtime.lock -r requirements-build.lock --dest .tmp/wheelhouse'
       - run: python tools/verify_artifacts.py --wheel dist/a2ui_surface_diff-0.1.0-py3-none-any.whl --sdist dist/a2ui_surface_diff-0.1.0.tar.gz --wheelhouse .tmp/wheelhouse

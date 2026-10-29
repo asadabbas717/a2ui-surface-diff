@@ -14,7 +14,7 @@ checks passed and the milestone was pushed as 331b3c1. See phase3-audit.md.
 
 Windows/Python 3.13.15, portable pinned development environment:
 
-- 184 tests passed, 99.30% statement coverage. Adversarial additions exercise
+- 187 tests passed, 99.30% statement coverage. Adversarial additions exercise
   publication races, read-only/hard-link baselines, byte/shape boundaries,
   expression non-execution, and 10000 sparse slots round-tripped through check.
   Help/version now also return 2 on a closed pipe rather than shutdown code 120,
@@ -22,7 +22,7 @@ Windows/Python 3.13.15, portable pinned development environment:
 - Ruff lint/format, strict mypy for package and maintainer tools, pip check,
   wheel/sdist build, and metadata checks passed.
 - Runtime audit: 5 packages, no known vulnerabilities or skipped entries.
-  Windows development audit: 64 applicable packages, no known vulnerabilities or
+  Windows development audit: 65 applicable packages, no known vulnerabilities or
   skipped entries. See security-review.md for scope and caveats.
 - Fresh wheel/source installs succeeded separately in offline venvs outside
   the checkout. Version/entrypoint, schema hashes, commands/exits 0/1/2,
@@ -59,3 +59,13 @@ Final matrix acceptance requires all four Windows/Linux Python 3.12/3.13 jobs,
 including advisories, artifact installs/reproducibility, and performance checks,
 to pass for the exact pushed implementation. STATE.md records that observed result;
 this document must not be used to infer a green result before it exists.
+
+Initial refreshed workflow 80f5d9c failed validation before jobs (run 40792546162).
+Local parsing reproduced an unquoted colon-space in --only-binary=:all: at line
+38. The value is now quoted and a safe YAML/scalar-command regression is retained.
+The new parser is development-only and was added to the audited portable lock.
+A further Windows-locale check reproduced Unicode diff failure on ASCII output;
+escaped text fallback now preserves diff exit1 and exact JSON, with subprocess
+regressions. A maintainer doc-edit helper's locale decoding was corrected using
+explicit UTF-8; normal capture/baseline readers already decode UTF-8 explicitly.
+The failed hosted run is not represented as acceptance; all gates are rerun.

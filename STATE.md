@@ -36,7 +36,7 @@ Historical green runs do not substitute for the new Phase 4 matrix.
 - Portable exact development lock with platform markers, replacing the Windows
   version inventory. Runtime/backend locks also include published artifact hashes.
   Generator: uv 0.13.6 in a maintainer-only environment. No new runtime dependency.
-- Current advisory checks: runtime 5 packages and local Windows development 64
+- Current advisory checks: runtime 5 packages and local Windows development 65
   applicable packages, no known vulnerability entries or skipped packages. CI
   audits both locks on each target to include Linux-only development markers.
 - Runtime/build license provenance and upstream attribution review documented in
@@ -67,7 +67,7 @@ because the sandbox default temporary directory restricts pip build files.
 ```powershell
 .venv\Scripts\python -m pip install -r requirements-dev.lock
 .venv\Scripts\python -m pip install --no-build-isolation --no-deps -e .
-.venv\Scripts\python -m pytest --basetemp=.tmp/phase4-final --cov-report=xml
+.venv\Scripts\python -m pytest --basetemp=.tmp/phase4-encoding-repair --cov-report=xml
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python -m ruff format --check .
 .venv\Scripts\python -m mypy
@@ -82,7 +82,7 @@ because the sandbox default temporary directory restricts pip build files.
 git diff --check
 ```
 
-Final suite: 184 passed; 99.30% statement coverage (709/714). Uncredited statements
+Final suite: 187 passed; 99.30% statement coverage (714/719). Uncredited statements
 are the module entrypoint and argparse termination handling exercised in child
 processes. Ruff lint/format, strict mypy (14 package/tool modules), pip check,
 artifact metadata and advisory checks passed. Fresh offline artifact installs and
@@ -121,3 +121,16 @@ accepted. After all four phases, await owner artifact/release review; confirm a
 private security reporting channel and obtain explicit publication/tag/release
 approval. Recheck package name and advisories immediately before any authorized
 publication. Do not publish or invent another development phase automatically.
+
+## Phase 4 repair before acceptance
+
+80f5d9c6e1476689a4c7f65f70c8a0a2b62d5777 failed workflow validation before jobs
+(run 40792546162). An unquoted colon-space was reproduced as YAML ScannerError
+at line38, quoted, and covered by a safe parser/scalar-run regression. PyYAML
+6.0.3 is development-only; 65 applicable Windows development packages audited
+with no known vulnerability entries or skips. A Windows-locale test also found
+that valid Unicode diff paths failed on ASCII output. Escaped text fallback and
+exact JSON now preserve proper exit1; subprocess regressions cover both formats.
+A doc-update helper was corrected to explicit UTF-8 and affected text repaired.
+All gates and artifact proof are rerun before pushing this repair; the initial
+failed workflow is not acceptance.

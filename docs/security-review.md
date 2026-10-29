@@ -36,7 +36,7 @@ Using [PyPA pip-audit](https://github.com/pypa/pip-audit) 2.10.1 against current
 public advisory data:
 
 - Runtime hash lock: 5 packages, 0 known vulnerability entries, 0 skipped entries.
-- Development lock on local Windows/Python 3.13: 64 applicable packages,
+- Development lock on local Windows/Python 3.13: 65 applicable packages,
   0 known vulnerability entries, 0 skipped entries. Linux-only markers are
   exercised by the hosted Linux matrix, not claimed from this Windows run.
 
@@ -73,3 +73,11 @@ and relevant owner-configured topics were verified and preserved. PyPI returned
 404 for a2ui-surface-diff and the three previously checked similar names; this
 does not reserve a name. Private security reporting should be confirmed by the
 owner before publication; no account/security setting was silently changed.
+
+PyYAML 6.0.3 (MIT metadata) is development-only, for a regression check of
+workflow YAML grammar and scalar run commands; it is not imported by the CLI.
+An initial workflow failed before jobs due to an unquoted colon in a pip flag.
+Local parser reproduction identified the fault; quoting and regression checks
+repair it without removing a gate. Human output also falls back to escaped
+Unicode when a limited output encoding cannot represent a valid identifier;
+JSON paths and semantic exit codes remain exact.

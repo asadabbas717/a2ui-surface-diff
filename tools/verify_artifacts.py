@@ -23,7 +23,8 @@ package_path = pathlib.Path(surface_diff.__file__).resolve()
 assert package_path.is_relative_to(pathlib.Path(sys.prefix).resolve())
 assert surface_diff.__version__ == importlib.metadata.version("a2ui-surface-diff") == "0.1.0"
 assets = files("surface_diff").joinpath("schemas")
-for name, digest in json.loads(assets.joinpath("SHA256SUMS.json").read_text()).items():
+manifest = json.loads(assets.joinpath("SHA256SUMS.json").read_text(encoding="utf-8"))
+for name, digest in manifest.items():
     assert hashlib.sha256(assets.joinpath(name).read_bytes()).hexdigest() == digest
 for name in ("snapshot-v1.json", "check-report-v1.json"):
     assert assets.joinpath(name).is_file()
@@ -53,9 +54,20 @@ print("installed package, schemas, offline CLI and exits 0/1/2: PASS")
 
 
 def run(command: list[str], cwd: Path) -> str:
-    environment = {**os.environ, "PIP_NO_INDEX": "1", "PIP_DISABLE_PIP_VERSION_CHECK": "1"}
+    environment = {
+        **os.environ,
+        "PIP_NO_INDEX": "1",
+        "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+        "PYTHONIOENCODING": "utf-8",
+    }
     result = subprocess.run(
-        command, cwd=cwd, env=environment, capture_output=True, text=True, check=False
+        command,
+        cwd=cwd,
+        env=environment,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
     )
     if result.returncode != 0:
         raise RuntimeError(f"Command failed: {command!r}\n{result.stdout}\n{result.stderr}")

@@ -126,6 +126,8 @@ pytest-cov==7.1.0
     # via a2ui-surface-diff (pyproject.toml)
 pywin32-ctypes==0.2.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'win32'
     # via keyring
+pyyaml==6.0.3
+    # via a2ui-surface-diff (pyproject.toml)
 readme-renderer==46.0
     # via twine
 referencing==0.37.0
