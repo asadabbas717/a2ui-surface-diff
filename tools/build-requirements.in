@@ -1,0 +1,2 @@
+# Source artifact installation needs the declared backend and its dependencies.
+hatchling>=1.27,<2

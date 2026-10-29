@@ -12,6 +12,21 @@ full Windows/Linux and Python 3.12/3.13 matrix. Phase 4 has not started.
 Phase 3 has now passed independent review after a terminal-output repair; see
 `docs/phase3-audit.md`. The owner authorizes the next single phase and tested pushes.
 
+## Phase 4 scope and acceptance
+
+Harden the existing MVP only: adversarial/error/output tests, performance sanity
+checks, runtime dependency/license/vulnerability review, universal dependency
+locks, fresh wheel/sdist installation checks, complete documentation/release notes,
+and a verified Windows/Linux Python 3.12/3.13 CI matrix with reviewed action pins.
+Keep runtime offline, existing schemas/CLI/report formats stable, and no overwrite
+or automatic approval path. No feature expansion, publication, tags, or releases.
+
+Accept only with executed reproducible tests and artifact evidence, no known
+Critical/High release blocker, accurate compatibility limitations, a current
+security/dependency review, complete release checklist, and exact next owner step.
+Risks: platform markers/wheels, offline source builds, advisory freshness, action
+runtime changes, resource costs, filesystem guarantees, and overclaiming readiness.
+
 ## Phase 3 scope and acceptance
 
 Add read-only baseline validation, deterministic structural comparison, check

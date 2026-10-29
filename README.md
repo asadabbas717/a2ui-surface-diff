@@ -6,11 +6,12 @@ baseline and detects interface structure changes when models or prompts change.
 It does not render interfaces or run a model. It is not endorsed by Google or
 the A2UI maintainers.
 
-**Current status: Phase 3 development preview (`0.1.0.dev3`).** `validate`,
+**Current status: `0.1.0` prepared locally; not published.** `validate`,
 `snapshot`, and `check` are implemented. They validate pinned official A2UI v0.9.1 schemas
 (accepting `v0.9` and `v0.9.1` messages), replay captures, and verify lifecycle,
 roots, and final references, then compare captured state against an approved
-snapshot. Release hardening remains Phase 4 work.
+snapshot. Tested targets are Windows/Linux with Python 3.12/3.13; see
+[release evidence](docs/release-evidence.md) for verified checks and limitations.
 
 ## Install and try
 
@@ -37,7 +38,8 @@ DIFF examples/checkout-after.jsonl: 3 structural changes.
   REFERENCE_CHANGED /surfaces/checkout/components/root/children/1
 ```
 
-Windows may display the path with backslashes. No package has been published;
+Human text escapes literal backslashes and terminal control characters. JSON
+reports preserve exact decoded paths/values. No package has been published;
 the source installation above is the supported installation for this phase.
 Snapshot output must be a new path in an existing directory. Existing files,
 including the capture, are never overwritten. Rename a previous demo baseline
@@ -73,7 +75,7 @@ combined effective data-model nodes, model depth 64, and maximum array index
 10,000. These are safety bounds, not performance claims.
 
 Normal CLI operation uses local files only. Catalog IDs are identifiers, never
-download targets. Captures and future snapshots may contain sensitive application
+download targets. Captures, snapshots, and JSON diffs may contain sensitive application
 data; review them before committing.
 
 See [compatibility](docs/protocol-compatibility.md),
@@ -92,16 +94,20 @@ Activate `.venv` with `.venv\Scripts\Activate.ps1` in PowerShell or
 `source .venv/bin/activate` in a POSIX shell, then:
 
 ```console
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements-dev.lock
+python -m pip install --no-build-isolation --no-deps -e .
 python -m pytest
 python -m ruff check .
 python -m ruff format --check .
 python -m mypy
+python -m pip check
+python -m pip_audit --strict --disable-pip --require-hashes -r requirements-runtime.lock --progress-spinner off
 python -m build --no-isolation
 python -m twine check dist/*
 ```
 
-Dependency ranges live in `pyproject.toml`; `requirements-dev.lock` records the
-versions used for local Phase 1 verification. It is a version inventory rather
-than a cross-platform, hash-verified lock. CI installs the declared ranges to
-exercise compatibility.
+Dependency ranges live in `pyproject.toml`. `requirements-dev.lock` now pins a
+portable development environment with platform markers. Runtime and source-build
+locks also pin artifact hashes; they are exercised by fresh offline installations
+in CI. See [maintainer instructions](docs/releasing.md) for regeneration,
+artifact verification, and the explicit approval required before publication.

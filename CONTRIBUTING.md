@@ -8,3 +8,9 @@ Follow ROADMAP and record decisions, evidence, defects, and next steps in STATE.
 Phase boundaries require owner instruction. Target Windows/Linux and Python
 3.12/3.13. The coverage gate is 90%; prioritize useful assertions over test count.
 Do not claim hosted CI passed based on local execution.
+
+Install the portable development lock before the editable project (README).
+Use `docs/releasing.md` for lock regeneration, artifact installation proof,
+the dependency audit, and performance observations. Maintainer tooling is also
+linted and strictly type-checked. Tests use synthetic public fixtures; do not
+introduce credentials, real UI data, runtime downloads, or expression evaluation.

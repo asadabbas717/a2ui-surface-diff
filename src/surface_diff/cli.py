@@ -31,8 +31,14 @@ def main(argv: list[str] | None = None) -> int:
     check.add_argument("input", type=Path)
     check.add_argument("--baseline", type=Path, required=True)
     check.add_argument("--format", choices=("text", "json"), default="text")
-    args = parser.parse_args(argv)
     try:
+        try:
+            args = parser.parse_args(argv)
+        except SystemExit:
+            # Help/version terminate inside argparse; flush before leaving
+            # so a closed pipe still follows the processing-error boundary.
+            sys.stdout.flush()
+            raise
         result = _execute(args)
         sys.stdout.flush()
         return result
@@ -85,7 +91,6 @@ def _execute(args: argparse.Namespace) -> int:
     if args.command == "snapshot" and report.valid:
         assert analysis.snapshot is not None
         write_snapshot(args.out, analysis.snapshot)
-    if args.command == "snapshot" and report.valid:
         print(terminal_text(f"Snapshot written: {args.out}"))
         return 0
     if getattr(args, "format", "text") == "json":

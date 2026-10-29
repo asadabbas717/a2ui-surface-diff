@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0 — prepared, not published
+
+- Offline A2UI v0.9.1 validation/replay, canonical snapshots, structural checks,
+  stable machine reports, and CI exit codes 0/1/2.
+- Phase 3 audit: escape terminal control/format characters in human output while
+  retaining exact JSON paths and printable Unicode.
+- Phase 4: portable dependency locks, hash-verified runtime/build dependencies,
+  advisory audit, fresh offline wheel/source installation proof, repeat-build
+  digest verification, output race/boundary hardening tests, and performance
+  sanity tooling. Refresh immutable CI action pins to Node 24.
+- Return processing-error code 2 for closed help/version output pipes rather than
+  interpreter shutdown code 120.
+- Public compatibility and security limitations are documented. No GitHub release,
+  tag, or package publication was created; development previews below were also
+  unpublished.
+
 ## 0.1.0.dev3 — unreleased
 
 - Phase 2 audit: preserve null when deleting absent descendants; return code 2

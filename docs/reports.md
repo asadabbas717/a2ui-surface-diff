@@ -77,4 +77,4 @@ in untrusted paths and names. This prevents terminal escape injection and forged
 lines; machine-readable JSON retains exact decoded paths and values.
 The complete change payload budget is 32 MiB in addition to the 20,000-change
 limit. Output is flushed inside the CLI failure boundary; a closed output pipe
-returns 2 rather than an interpreter-shutdown flush code.
+returns 2 rather than an interpreter-shutdown flush code, including help/version.

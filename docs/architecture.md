@@ -30,3 +30,11 @@ compare equal to numbers; numeric representations such as 1/1.0 do compare equal
 Added/removed containers and component type changes stop descendant reporting.
 All output paths are escaped pointers sorted lexicographically. The comparison
 limit fails the entire operation rather than returning a partial successful diff.
+
+Maintainer-only tools verify same-checkout build digests and separate offline
+wheel/source installs in fresh environments; their probes block socket/DNS calls
+before importing the installed package. Performance tooling verifies a modest
+workload and reports observations without flaky timing thresholds. Both are
+strictly type-checked and reject optimized mode so checks cannot be stripped.
+Runtime/build locks include hashes; the portable development lock pins markers
+and versions. None of this tooling runs during normal CLI use.

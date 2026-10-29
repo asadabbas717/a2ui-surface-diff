@@ -2,154 +2,122 @@
 
 Updated: 2026-10-29 (Asia/Karachi).
 
-## Current status and authorization
+## Current milestone and authorization
 
-Current iteration starts clean at 733bcbb. Phase 3 is independently reviewed;
-terminal control injection in human output was repaired (172 tests, 99.72%
-coverage; all configured checks pass). See docs/phase3-audit.md. The owner has
-authorized Phase 4 after this acceptance and commit/push of tested milestones.
-The remainder of this state records the preceding Phase 3 milestone until Phase 4
-updates replace it. Package publication/releases remain unauthorized.
+Phase 4 release-readiness implementation is complete locally, pending its exact
+refreshed hosted matrix before final acceptance. Phases 1–3 are implemented and
+independently audited. Target/local artifact version is 0.1.0, still unpublished.
+There is no fifth feature phase. Branch main started clean/synchronized at
+733bcbb51437c559a495b23c1eeadc95007964d3; unrelated user work was not changed.
 
-Phases 1–3 are complete locally. Phase 4 has not started. Development version:
-0.1.0.dev3; target release remains 0.1.0. Branch: main. This iteration started
-clean and synchronized at 476bda703b5d9c65d25c3b232a7271ced8af6916. No unrelated
-user changes were present or removed.
+Remote: https://github.com/asadabbas717/a2ui-surface-diff.git. The owner authorizes
+commit/push of every milestone after checks pass. Tag/release/package upload,
+visibility/security-setting changes remain unauthorized and were not performed.
+Repository description, relevant topics, and Apache-2.0 license were verified and
+preserved. PyPI and the three previously checked similar names returned 404;
+this is not a reservation and must be rechecked before any publication.
 
-Remote: https://github.com/asadabbas717/a2ui-surface-diff.git.
-The owner explicitly authorized commit/push of every milestone after its checks
-pass. The Phase 2 audit repair was committed/pushed as
-57c9426a21355c8fc48eb10b622d797a4b1f812b. Phase 3 was committed/pushed as
-c3ffc6ba306938213ccd8ef32918d1672e729d4e. Hosted run 40786664420 passed all four
-Ubuntu/Windows, Python 3.12/3.13 jobs for that exact implementation commit.
-This follow-up continuity commit changes documentation only.
-No package publication, release, or visibility change is authorized or performed.
+## Phase 3 independent audit
 
-## Previous-phase audit
+See docs/phase3-audit.md: a Medium terminal control-injection defect was reproduced
+and repaired. Human output now escapes controls/format characters/backslashes,
+while printable Unicode and exact decoded JSON data are preserved. The repaired
+suite passed 172 tests, 99.72% statement coverage, all lint/format/type/dependency/
+build/metadata checks. Milestone 331b3c1 was committed/pushed before Phase 4.
+No Critical/High defect was reproduced in the reviewed scope.
 
-See docs/phase2-audit.md. Two Medium defects were repaired: absent deletion
-through a null intermediate changed state, and stdout rendering bypassed the
-CLI failure boundary. Nulls now remain unchanged on absent-descendant deletion;
-output failures return processing-error code 2. During Phase 3, explicit flush
-and failed-stream closure also fixed buffered shutdown behavior, verified with a
-real closed-pipe subprocess. No Critical/High defect was reproduced in the audit.
+Historical implementation commits: 41355ec Phase 1, 08be30a Phase 1 repair,
+476bda7 Phase 2, 57c9426 Phase 2 repair, c3ffc6b Phase 3, 733bcbb CI evidence.
+Their exact hosted evidence and defects are retained in the phase audit docs.
+Historical green runs do not substitute for the new Phase 4 matrix.
 
-Repaired Phase 2 local evidence: 105 tests, 99.57% statement coverage, and all
-lint/format/type/dependency/build/metadata checks passed. Its hosted run
-40784042065 passed all four Ubuntu/Windows, Python 3.12/3.13 jobs. Original Phase 2
-run 40783646327 also passed all four jobs. Original Phase 1 run 40781697398 failed
-Windows on an entrypoint test-path defect fixed in 08be30a; the historical failure
-is retained in docs/phase1-audit.md rather than represented as current success.
+## Phase 4 delivered
 
-## Phase 3 delivered
+- Portable exact development lock with platform markers, replacing the Windows
+  version inventory. Runtime/backend locks also include published artifact hashes.
+  Generator: uv 0.13.6 in a maintainer-only environment. No new runtime dependency.
+- Current advisory checks: runtime 5 packages and local Windows development 64
+  applicable packages, no known vulnerability entries or skipped packages. CI
+  audits both locks on each target to include Linux-only development markers.
+- Runtime/build license provenance and upstream attribution review documented in
+  docs/security-review.md; no relicensing or new vendored third-party code.
+- Hardened publication races, read-only/hard-link baseline aliases, exact byte and
+  decoded-shape boundaries, expression non-execution, and sparse index10000
+  round-trip. Normal commands remain offline and never rewrite approved baselines.
+- Fixed a reproduced closed-pipe defect in argparse help/version: shutdown code
+  120 is replaced with processing-error code 2, tested as real subprocesses.
+- Maintainer tools verify fresh separate wheel/source installs offline, installed
+  package origin/version/assets, commands/exits, baseline protection, blocked
+  socket/DNS calls, and same-checkout repeated-build digests. Successful proof
+  writes final dist/SHA256SUMS. Tools reject -O so assertions cannot be stripped.
+- Modest performance workload with correctness assertions and observed timings,
+  not speed thresholds/claims. Detailed observations in docs/release-evidence.md.
+- Reviewed immutable checkout v7.0.1/setup-python v7.1.0 pins, Node24 runtimes,
+  contents:read permissions and disabled credential persistence. CI now includes
+  advisories, performance observation, and fresh/reproducible artifact proof.
+- Complete README/contributing/security/changelog, architecture/contracts,
+  limitations, maintainer procedure, release notes/checklist, and evidence.
 
-- check CLI: validate baseline first, replay/validate candidate, compare final
-  supported state. Exit 0 equal, 1 differences, 2 invalid/incomplete processing.
-- Read-only bounded strict JSON baseline parsing, duplicate/nonfinite/Unicode
-  rejection, wrapper schema, exact version/protocol metadata checks, matching
-  surface/component IDs, official schema checks, graph/state/undefined-slot checks.
-- Deterministic structural paths and codes for surfaces, components/types,
-  properties, actions, child/tab ordering, references, and effective data.
-- Added/removed containers and component type changes suppress descendant noise.
-  Arrays compare by index; exact child/tab reorders produce a single change.
-- JSON-aware equality: booleans differ from numbers; 1 and 1.0 compare equal.
-  Null, absent properties, and undefined array slots remain distinct.
-- Text output contains concise codes/paths; versioned JSON reports contain
-  explicit before/after value states. Sensitive values may be present in JSON.
-- SurfaceDiff-authored snapshot-v1.json and check-report-v1.json contracts,
-  independent baseline/no-difference/regression fixtures, realistic checkout demo,
-  CI check smoke command, and documentation updates.
-- Strict parsing shared between JSONL and snapshots. No new dependencies.
+## Verification performed locally
 
-## Architecture and compatibility decisions
-
-baseline.py composes existing official schema validation and replay integrity
-checks, then returns canonical state. comparison.py owns read-only diff/report
-logic. analysis/replay/data_model/snapshot retain their earlier responsibilities.
-No rendering, network access, expression evaluation, automatic approvals, filters,
-plugins, custom catalogs, or candidate v1.0 features were added.
-
-Pinned upstream revision: 4767c140e13b4d8952b92b3bef35b81121dc8810. Vendored assets,
-hashes, and license notices are unchanged. New SurfaceDiff schemas are separate
-from upstream hash entries. Both official v0.9/v0.9.1 envelope versions and the two
-documented Basic Catalog IDs remain supported. Captured catalog IDs are significant.
-SDK/schema/null/pointer differences remain explicit in protocol-compatibility.md
-and snapshots.md. Component collection upserts retain other components; each full
-definition replaces properties. Dynamic values and bindings compare structurally.
-
-Snapshot wrapper version remains 1; validation report remains version 2. Check
-reports use command=check/report_version=1, with passed/different/error status.
-Consumers dispatch on command and version. Error reports contain no partial diff.
-Snapshots/baselines: 64 MiB, 1M value nodes, depth 80 including wrappers. The writer
-checks the same bounds so it does not publish an unreadable baseline. Existing
-capture/replay limits remain: 16 MiB stream, 1 MiB physical line, 10000 messages,
-100,000 message nodes/depth 64, 1,000 active surfaces, 20,000 active components,
-200,000 combined model nodes/depth 64, maximum array index 10,000.
-
-Comparisons stop with code 2 at 20000 changes or a 32 MiB serialized change-payload
-budget. The budget prevents long repeated ancestor keys from multiplying report
-memory use. Paths sort lexicographically after JSON Pointer escaping, then by code;
-index 10 precedes 2. Undefined data slots are restored before comparing and are not
-reported twice through raw undefinedDataPaths metadata. Added/removed containers
-and type changes are intentionally summarized. Other arrays use positional
-comparison without speculative alignment. See comparison.md and reports.md.
-
-## Executed verification
-
-Local platform: Windows/Python 3.13.15. Project-local TEMP/TMP were used for pip
-and builds because the sandbox default temp directory has permission restrictions.
-Tests run with native NTFS permissions because snapshot hard links are denied in
-the sandbox; tests were not skipped or assertions weakened.
+Windows, Python 3.13.15. Native NTFS permissions were necessary for hard links;
+assertions were executed, not skipped/weakened. Project-local TEMP/TMP were used
+because the sandbox default temporary directory restricts pip build files.
 
 ```powershell
+.venv\Scripts\python -m pip install -r requirements-dev.lock
 .venv\Scripts\python -m pip install --no-build-isolation --no-deps -e .
-.venv\Scripts\python -m pytest --basetemp=.tmp/phase3-final --cov-report=xml
+.venv\Scripts\python -m pytest --basetemp=.tmp/phase4-final --cov-report=xml
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python -m ruff format --check .
 .venv\Scripts\python -m mypy
 .venv\Scripts\python -m pip check
+.venv\Scripts\python -m pip_audit --strict --disable-pip --require-hashes -r requirements-runtime.lock --format json --output .tmp/runtime-audit.json --progress-spinner off
+.venv\Scripts\python -m pip_audit --strict --disable-pip --no-deps -r requirements-dev.lock --format json --output .tmp/development-audit.json --progress-spinner off
+.venv\Scripts\python tools/performance_sanity.py
 .venv\Scripts\python -m build --no-isolation
-.venv\Scripts\python -m twine check dist/*
-.tmp\install-env\Scripts\python -m pip install --no-index --no-deps --force-reinstall dist/a2ui_surface_diff-0.1.0.dev3-py3-none-any.whl
+.venv\Scripts\python -m twine check dist/a2ui_surface_diff-0.1.0*
+.venv\Scripts\python -m pip download --only-binary=:all: --require-hashes -r requirements-runtime.lock -r requirements-build.lock --dest .tmp/wheelhouse
+.venv\Scripts\python tools/verify_artifacts.py --wheel dist/a2ui_surface_diff-0.1.0-py3-none-any.whl --sdist dist/a2ui_surface_diff-0.1.0.tar.gz --wheelhouse .tmp/wheelhouse
 git diff --check
 ```
 
-170 tests passed; 99.72% statement coverage (706/708). Only the two module entry
-statements were not credited in-process; module/installed entrypoints are exercised
-as subprocesses. Ruff lint/format, strict mypy (12 modules), dependency consistency,
-wheel/sdist build and metadata checks all pass. No vulnerability scanner is
-configured or claimed. A first new test expected pre-escape key order; inspection
-confirmed the implementation's specified escaped-path order, and the exact
-expectation was corrected rather than weakening the ordering assertion.
+Final suite: 184 passed; 99.30% statement coverage (709/714). Uncredited statements
+are the module entrypoint and argparse termination handling exercised in child
+processes. Ruff lint/format, strict mypy (14 package/tool modules), pip check,
+artifact metadata and advisory checks passed. Fresh offline artifact installs and
+repeated-build digests passed; repeat with final docs before pushing the tested
+milestone. See release-evidence.md and releasing.md for scope/commands.
 
-Installed-wheel smoke checks ran outside the checkout using .tmp/install-env:
-the real README snapshot/check workflow, exit codes 0/1/2, report JSON Schema,
-version, baseline/capture byte preservation, and direct checks with socket creation
-blocked all passed. Wheel inspection confirms both authored schemas and new
-modules; sdist includes comparison fixtures/docs and excludes environments/temp.
-The release-quality dependency inventory remains requirements-dev.lock; it is a
-Windows version inventory, not a portable hash lock. Dependencies did not change.
+## Contracts and remaining limits
 
-## Remaining risks, deferred work, exact next step
+Pinned upstream revision: 4767c140e13b4d8952b92b3bef35b81121dc8810; upstream hashes
+and notices unchanged. Supports official v0.9/v0.9.1 envelopes and two documented
+Basic Catalog IDs, with explicit SDK/schema/null/pointer differences. No v0.8,
+v1.0, custom catalogs, rendering, model calls, evaluation, or auto-approvals.
+Snapshot wrapper1, validation report2, check report1 are unchanged. Consumers
+select report contracts by command/version. Booleans differ from numbers; numeric
+1 and 1.0 compare equal. Absent/null/undefined remain distinct. JSON can contain
+sensitive application values; text has controls escaped.
 
-No known Critical/High defect remains in implemented Phase 3 scope. This is still
-a development preview pending Phase 4 release-readiness hardening.
+Capture limits: 16 MiB, 1 MiB per physical line, 10000 messages, 100000 nodes and
+depth64/message. Replay: 1000 active surfaces, 20000 components, combined model
+nodes200000/depth64, max array index10000. Snapshot/baseline: 64 MiB, 1M nodes,
+depth80. Comparison: 20000 changes and 32 MiB serialized change-payload budget;
+incomplete analysis fails with code2, never a partial successful comparison.
 
-- Phase 3 implementation CI is verified: run 40786664420 at c3ffc6b, all four
-  matrix jobs successful, including tests, lint/format/types, CLI smoke, build,
-  and metadata checks. This does not imply release readiness or publication.
-- Snapshots need hard-link support (e.g. NTFS/ext4); denied/unsupported publication
-  fails without replacing existing entries. Atomicity is not power-loss durability.
-- No wall-time sandbox or performance promise. Repeated model updates copy state.
-- SDK-specific type-omitting patches, arbitrary catalogs, evaluation, rendering,
-  v0.8 and candidate v1.0 remain unsupported. Coherent complete-message truncation
-  cannot be detected without an external completion signal.
-- Array alignment, detailed nested schema-error guidance, portable dependency
-  locking, dependency/license/security review, and CI action runtime refresh are
-  deferred; no MVP expansion is implied. JSON diff reports can contain sensitive data.
-- PyPI naming was initially checked but remains unreserved; recheck before any
-  owner-authorized publication. Keep Apache-2.0 and independent/unofficial identity.
+Remaining explicit limits: no wall-time sandbox or power-loss durability, required
+hard-link support, positional array diffing, no complete-message truncation signal,
+and no exhaustive verification of newer Python/platform/dependency combinations.
+Nested schema guidance/heuristic alignment remain optional future improvements,
+not known Critical/High defects or promised phase-five scope. Advisory results are
+dated evidence, not a guarantee of vulnerability absence. See limitations.md.
 
-Exact next step: await the owner's next iteration instruction. Then audit Phase 3 before implementing
-only Phase 4 hardening/release preparation. Do not publish, release, change visibility,
-or automatically start Phase 4.
+## Exact next step
+
+Commit/push the tested Phase 4 milestone, inspect all four refreshed hosted jobs,
+repair any failure, and record actual commit/run evidence. Only then mark Phase 4
+accepted. After all four phases, await owner artifact/release review; confirm a
+private security reporting channel and obtain explicit publication/tag/release
+approval. Recheck package name and advisories immediately before any authorized
+publication. Do not publish or invent another development phase automatically.
